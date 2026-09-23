@@ -1,0 +1,59 @@
+<view wx:if="{{show}}" class="wpwrap">
+  <view class="wpscrim" bindtap="onCancel"></view>
+
+  <view class="wpsheet" catchtap="noop">
+    <view class="wpgrab"><view class="wpgrabi"></view></view>
+
+    <view class="wpsnav">
+      <view class="wpcancel" bindtap="onCancel">取消</view>
+      <view class="wptitle">{{mode === 'time' ? '提醒时间' : '日期时间'}}</view>
+      <view class="wpok" bindtap="onOk">完成</view>
+    </view>
+
+    <!-- 快捷胶囊：仅日期模式显示 -->
+    <view wx:if="{{mode !== 'time'}}" class="wpchips">
+      <view class="chip {{chipToday ? 'on' : ''}}" data-o="0" bindtap="onQuick">今天</view>
+      <view class="chip {{chipTomorrow ? 'on' : ''}}" data-o="1" bindtap="onQuick">明天</view>
+      <view class="chip {{chipAfter ? 'on' : ''}}" data-o="2" bindtap="onQuick">后天</view>
+      <view class="chip {{allDay ? 'on' : ''}}" bindtap="onAllDay">全天</view>
+    </view>
+
+    <view class="wheels">
+      <picker-view
+        class="wpview"
+        indicator-class="wpind"
+        value="{{value}}"
+        bindchange="onChange"
+      >
+        <picker-view-column wx:if="{{mode !== 'time'}}" style="flex:1.5">
+          <view wx:for="{{dates}}" wx:key="key" class="wit">
+            <view class="wit1">{{item.label}}</view>
+            <view class="wit2 {{item.accent ? 'cc' : ''}}">{{item.sub}}</view>
+          </view>
+        </picker-view-column>
+
+        <picker-view-column wx:if="{{!allDay}}" style="flex:1">
+          <view wx:for="{{hours}}" wx:key="v" class="wit witc">{{item.label}}</view>
+        </picker-view-column>
+
+        <picker-view-column wx:if="{{!allDay}}" style="flex:1">
+          <view wx:for="{{mins}}" wx:key="v" class="wit witc">{{item.label}}</view>
+        </picker-view-column>
+
+        <!-- 全天模式：用一列文字替代时间滚轮 -->
+        <picker-view-column wx:if="{{allDay}}" style="flex:1">
+          <view class="wit witc alldaytxt">全天</view>
+        </picker-view-column>
+      </picker-view>
+
+      <view wx:if="{{showColon}}" class="wpcolon" style="left:{{colonLeft}}">:</view>
+    </view>
+
+    <view class="wphint">{{hint}}</view>
+
+    <view wx:if="{{mode === 'time'}}" class="wplock">
+      <view class="ico ico-info ico-t3 wplocki"></view>
+      <text>全天任务不受这个时间影响</text>
+    </view>
+  </view>
+</view>

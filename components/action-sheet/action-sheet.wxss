@@ -1,0 +1,76 @@
+@import "../../styles/icons.wxss";
+
+.aswrap { position: fixed; inset: 0; z-index: 8000; }
+.asscrim {
+  position: absolute;
+  inset: 0;
+  background: rgba(38, 36, 31, .4);
+  animation: asfade .16s ease-out;
+}
+@keyframes asfade { from { opacity: 0 } to { opacity: 1 } }
+
+.assheet {
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  background: #FFFFFF;
+  border-radius: 32rpx 32rpx 0 0;
+  animation: asin .24s cubic-bezier(.32, .72, 0, 1);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+@keyframes asin { from { transform: translateY(101%) } to { transform: translateY(0) } }
+
+.asgrab { padding: 16rpx 0 8rpx; display: flex; justify-content: center; }
+.asgrabi { width: 72rpx; height: 8rpx; border-radius: 999rpx; background: #E5E0D4; }
+
+.astitle {
+  padding: 16rpx 40rpx 0;
+  font-size: 36rpx;
+  font-weight: 500;
+  text-align: center;
+  color: #26241F;
+}
+.asdesc {
+  padding: 16rpx 40rpx 0;
+  font-size: 26rpx;
+  color: #6E6A5F;
+  text-align: center;
+  line-height: 1.7;
+}
+
+.asitems { margin-top: 28rpx; }
+.asitem {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+  padding: 28rpx 32rpx;
+}
+.asitem + .asitem::before {
+  content: '';
+  position: absolute;
+  left: 32rpx; right: 0; top: 0;
+  height: 1rpx;
+  background: #E5E0D4;
+}
+.asitem:active { background: #F6F3EC; }
+.asico { width: 36rpx; height: 36rpx; }
+.asm { font-size: 30rpx; color: #26241F; }
+.asitem.dg .asm { color: #C4453A; }
+.ass { font-size: 24rpx; color: #A19B8D; margin-top: 4rpx; }
+
+.ascancel {
+  text-align: center;
+  font-size: 30rpx;
+  color: #A19B8D;
+  padding: 28rpx 0;
+  position: relative;
+}
+.ascancel::before {
+  content: '';
+  position: absolute;
+  left: 0; right: 0; top: 0;
+  height: 1rpx;
+  background: #E5E0D4;
+}
+
+.flex1 { flex: 1; min-width: 0; }

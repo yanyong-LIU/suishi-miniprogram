@@ -1,0 +1,13 @@
+{
+  "navigationStyle": "custom",
+  "backgroundColor": "#F6F3EC",
+  "backgroundTextStyle": "dark",
+  "usingComponents": {
+    "nav-bar": "/components/nav-bar/nav-bar",
+    "field-row": "/components/field-row/field-row",
+    "action-sheet": "/components/action-sheet/action-sheet",
+    "confirm-dialog": "/components/confirm-dialog/confirm-dialog",
+    "wheel-picker": "/components/wheel-picker/wheel-picker",
+    "guide-sheet": "/components/guide-sheet/guide-sheet"
+  }
+}

@@ -1,0 +1,28 @@
+<view wx:if="{{show}}" class="aswrap">
+  <view class="asscrim" bindtap="onCancel"></view>
+
+  <view class="assheet" catchtap="noop">
+    <view class="asgrab"><view class="asgrabi"></view></view>
+
+    <view wx:if="{{title}}" class="astitle">{{title}}</view>
+    <view wx:if="{{desc}}" class="asdesc">{{desc}}</view>
+
+    <view class="asitems">
+      <view
+        wx:for="{{items}}"
+        wx:key="index"
+        class="asitem {{item.danger ? 'dg' : ''}}"
+        data-i="{{index}}"
+        bindtap="onPick"
+      >
+        <view class="ico ico-{{item.icon || 'trash'}} {{item.danger ? 'ico-dg' : 'ico-t2'}} asico"></view>
+        <view class="flex1">
+          <view class="asm">{{item.label}}</view>
+          <view wx:if="{{item.sub}}" class="ass">{{item.sub}}</view>
+        </view>
+      </view>
+    </view>
+
+    <view class="ascancel" bindtap="onCancel">{{cancelText}}</view>
+  </view>
+</view>

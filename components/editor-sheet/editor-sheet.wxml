@@ -1,0 +1,137 @@
+<!-- ============================================================
+     编辑器 · 半屏弹层
+     ------------------------------------------------------------
+     与原型 editorBody() 同构：grab → snav（取消 / 标题 / 保存）
+     → sbody（标题输入 + 提醒条 + 两组字段 + 删除）→ sfoot（保存）。
+     两组字段按语义分：上一组「这件事是什么」，下一组「怎么叫我」。
+     关闭提醒时的后果必须当场说清楚，不能等用户某天发现没响。
+
+     重复规则是本组件内嵌的第二层弹层，不是整页跳转；
+     TabBar 由 utils/platform.js#overlayTab 按嵌套深度摘除。
+     ============================================================ -->
+<view wx:if="{{show}}" class="shwrap">
+  <view class="scrim" bindtap="onCancel"></view>
+
+  <!-- style 由 onKb 给：键盘抬起时把弹层整体移到键盘之上，
+       并把可用高度写成 max-height，让 sbody 变成真正可滚的容器。
+       键盘收起时为空串，回落到 .essheet 的 max-height:88%。 -->
+  <view class="sheet essheet" style="{{sheetStyle}}" catchtap="noop">
+    <view class="grab"><view class="grabi"></view></view>
+
+    <view class="snav">
+      <view class="snavb" bindtap="onCancel">取消</view>
+      <view class="t">{{isEdit ? '编辑碎事' : '新建碎事'}}</view>
+      <view class="snavb end {{canSave ? 'ci' : 'td'}}" bindtap="onSave">保存</view>
+    </view>
+
+    <scroll-view class="sbody" scroll-y>
+      <view class="titlewrap">
+        <!-- adjust-position 关掉：弹层是 fixed 的，系统那套「页面上推」
+             对它无效，只会把底下的页面也带着滚；位置由 onKb 自己算。 -->
+        <input
+          class="titlein"
+          value="{{title}}"
+          maxlength="50"
+          placeholder="要做什么？"
+          placeholder-class="tinph"
+          focus="{{autoFocus}}"
+          confirm-type="done"
+          adjust-position="{{false}}"
+          bindinput="onTitle"
+          bindkeyboardheightchange="onKb"
+        />
+        <view class="uline"></view>
+        <view class="t12 {{titleCountCls}} tcount">{{titleCount}}</view>
+      </view>
+
+      <!-- 时间已过且不重复：给一条即时可点的修正路径 -->
+      <view wx:if="{{pastWarn}}" class="warnbar">
+        <view class="ico ico-warn ico-wn wbicon"></view>
+        <text class="flex1">这个时间已经过去了，要改成重复吗？</text>
+        <text class="txtbtn cw quickfix" bindtap="onMakeDaily">改成每天</text>
+      </view>
+
+      <!-- 第一组：这件事是什么 -->
+      <view class="group gfirst">
+        <view class="frow tap" bindtap="onPickDate">
+          <view class="ico ico-calendar ico-t3"></view>
+          <text class="lb">日期时间</text>
+          <text class="vl">{{dueLabel}}</text>
+          <view class="ico ico-right ico-t3"></view>
+        </view>
+
+        <view class="frow tap" bindtap="onPickRepeat">
+          <view class="ico ico-repeat ico-t3"></view>
+          <text class="lb">重复</text>
+          <text class="vl {{repeat.type === 'none' ? 'ph' : ''}}">{{repeatLabel}}</text>
+          <view class="ico ico-right ico-t3"></view>
+        </view>
+
+        <view class="frow tap" bindtap="onToggleNote">
+          <view class="ico ico-note ico-t3"></view>
+          <text class="lb">备注</text>
+          <text class="vl {{note ? '' : 'ph'}}">{{note ? noteShort : '添加备注'}}</text>
+          <view class="ico ico-right ico-t3"></view>
+        </view>
+
+        <view wx:if="{{noteOpen}}" class="notewrap">
+          <textarea
+            class="dnote"
+            value="{{note}}"
+            maxlength="200"
+            placeholder="想补充点什么？"
+            placeholder-class="tinph"
+            focus="{{focusNote}}"
+            auto-height="{{true}}"
+            adjust-position="{{false}}"
+            bindinput="onNote"
+            bindkeyboardheightchange="onKb"
+          ></textarea>
+          <view class="t12 c3 ncount">{{note.length}}/200</view>
+        </view>
+      </view>
+
+      <!-- 第二组：怎么叫我 -->
+      <view class="group">
+        <view class="frow">
+          <view class="ico ico-bell ico-t3"></view>
+          <text class="lb">到时提醒</text>
+          <view class="flex1"></view>
+          <view class="sw {{remind ? 'on' : ''}}" catchtap="onToggleRemind">
+            <view class="knob"></view>
+          </view>
+        </view>
+
+        <view class="frow">
+          <view class="ico ico-calendar ico-t3"></view>
+          <text class="lb">同时写入手机日历</text>
+          <view class="flex1"></view>
+          <view class="sw {{syncCalendar ? 'on' : ''}}" catchtap="onToggleCal">
+            <view class="knob"></view>
+          </view>
+        </view>
+      </view>
+
+      <view wx:if="{{!remind}}" class="lockmsg">
+        <view class="ico ico-info ico-t3"></view>
+        <text>关闭后不会收到任何提醒</text>
+      </view>
+
+      <view wx:if="{{isEdit}}" class="center delwrap">
+        <text class="txtbtn danger" bindtap="onDelete">删除这件事</text>
+      </view>
+
+      <view style="height:12rpx"></view>
+    </scroll-view>
+
+    <view class="sfoot">
+      <button class="btn" disabled="{{!canSave}}" bindtap="onSave">保存</button>
+    </view>
+  </view>
+
+  <!-- 编辑器自己的第二层弹层：日期滚轮 / 授权引导 / 重复规则 / 删除范围 -->
+  <wheel-picker id="epicker"></wheel-picker>
+  <guide-sheet id="eguide"></guide-sheet>
+  <action-sheet id="esheet"></action-sheet>
+  <repeat-sheet id="erepeat"></repeat-sheet>
+</view>

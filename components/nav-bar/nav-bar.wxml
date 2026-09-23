@@ -1,0 +1,17 @@
+<view wx:if="{{spacerOnly}}" class="navspacer" style="height:{{statusBarHeight + navRow}}px"></view>
+
+<view wx:else class="navwrap">
+  <view class="navspacer" style="height:{{statusBarHeight}}px"></view>
+  <view class="nav" style="height:{{navRow}}px">
+    <view class="navside">
+      <view wx:if="{{showBack}}" class="navback" bindtap="onBack">
+        <view class="ico ico-left ico-ink navico"></view>
+        <text class="t15 ci">{{backText}}</text>
+      </view>
+    </view>
+    <view class="navtitle ellip t16 w5">{{title}}</view>
+    <view class="navside right">
+      <view wx:if="{{rightText}}" class="t15 ci" style="padding:16rpx 8rpx" bindtap="onRight">{{rightText}}</view>
+    </view>
+  </view>
+</view>

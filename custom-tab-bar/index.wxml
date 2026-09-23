@@ -1,0 +1,20 @@
+<!-- 自定义 TabBar。未同意隐私政策前整条隐藏，否则它会压在隐私门之上 -->
+<view wx:if="{{!hidden}}" class="tabbar" style="padding-bottom:{{safeBottom}}px">
+  <view
+    wx:for="{{tabs}}"
+    wx:key="key"
+    class="tabitem {{selected === index ? 'on' : ''}}"
+    data-i="{{index}}"
+    bindtap="onTap"
+  >
+    <view class="ico ico-{{item.icon}} {{selected === index ? 'ico-ink' : 'ico-t3'}} tbi"></view>
+    <text class="tbl">{{item.label}}</text>
+    <view wx:if="{{badge && item.key === 'mine'}}" class="tbdot"></view>
+  </view>
+
+  <!-- 居中确认框挂着时的暗罩：原型里 TabBar 本就在 #dlgLayer 之下、被遮罩罩暗
+       （并没有消失），小程序侧是原生组件盖不住，只能让它自己压一层同色暗罩。
+       放最后是为了压住 .tabitem（那些是 position:relative，按文档序绘制）。
+       catchtap 吃掉点击：确认框挂着时点 TabBar 不会把页面切走。 -->
+  <view wx:if="{{dim}}" class="tbdim" catchtap="noop"></view>
+</view>

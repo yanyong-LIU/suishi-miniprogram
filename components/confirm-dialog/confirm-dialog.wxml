@@ -1,0 +1,32 @@
+<view wx:if="{{show}}" class="dlgwrap">
+  <view class="dlgscrim" bindtap="onCancel"></view>
+
+  <view class="dlg" catchtap="noop">
+    <view class="dt">{{title}}</view>
+    <view wx:if="{{desc}}" class="dd">{{desc}}</view>
+
+    <!-- 内嵌开关：用于订阅消息授权的「总是保持以上选择」 -->
+    <view wx:if="{{showSwitch}}" class="dlgsw">
+      <view class="ico ico-bell ico-t3 dswi"></view>
+      <view class="flex1">
+        <view class="dswm">{{switchLabel}}</view>
+        <view class="dsws">{{switchSub}}</view>
+      </view>
+      <view class="sw {{switchValue ? 'on' : ''}}" bindtap="onToggleSwitch">
+        <view class="knob"></view>
+      </view>
+    </view>
+
+    <view class="dacts">
+      <view
+        wx:for="{{actions}}"
+        wx:key="index"
+        class="btn {{danger && index === actions.length - 1 ? 'danger' : ''}}"
+        data-i="{{index}}"
+        bindtap="onPick"
+      >{{item}}</view>
+    </view>
+
+    <view wx:if="{{showCancel}}" class="cancel" bindtap="onCancel">取消</view>
+  </view>
+</view>

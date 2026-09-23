@@ -1,0 +1,46 @@
+@import "../styles/icons.wxss";
+
+.tabbar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 100;
+  display: flex;
+  height: 100rpx;
+  background: #F6F3EC;
+  border-top: 1rpx solid #E5E0D4;
+}
+.tabitem {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4rpx;
+  color: #A19B8D;
+  position: relative;
+}
+.tabitem.on { color: #3D4E68; }
+.tbi { width: 44rpx; height: 44rpx; }
+.tbl { font-size: 24rpx; line-height: 1; }
+.tbdot {
+  position: absolute;
+  top: 14rpx;
+  left: calc(50% + 16rpx);
+  width: 8rpx;
+  height: 8rpx;
+  border-radius: 50%;
+  background: #C4453A;
+}
+
+/* 居中确认框期间的暗罩。色值与弹层遮罩一致（confirm-dialog.wxss 的 .dlgscrim、
+   原型第 230 行的 .scrim 都是 rgba(38,36,31,.4)），所以 TabBar 这一条看上去
+   就是被同一层遮罩罩住的，与原型一致。
+   必须盖住整个 .tabbar（含安全区，故用 inset:0 而不是 height:100rpx）。 */
+.tbdim {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  background: rgba(38, 36, 31, .4);
+}

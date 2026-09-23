@@ -1,0 +1,33 @@
+.toast {
+  position: fixed;
+  left: 50%;
+  top: 88rpx;
+  transform: translate(-50%, -32rpx);
+  opacity: 0;
+  pointer-events: none;
+  background: rgba(38, 36, 31, .92);
+  color: #fff;
+  border-radius: 20rpx;
+  padding: 22rpx 32rpx;
+  font-size: 26rpx;
+  display: flex;
+  align-items: center;
+  gap: 28rpx;
+  transition: opacity .16s, transform .16s;
+  z-index: 9999;
+  max-width: calc(100% - 80rpx);
+  box-shadow: 0 16rpx 48rpx rgba(38, 36, 31, .2);
+}
+.toast.show {
+  opacity: 1;
+  transform: translate(-50%, 0);
+  pointer-events: auto;
+}
+.toast .tact {
+  color: #fff;
+  font-weight: 500;
+  font-size: 26rpx;
+  text-decoration: underline;
+  text-underline-offset: 4rpx;
+  flex: none;
+}

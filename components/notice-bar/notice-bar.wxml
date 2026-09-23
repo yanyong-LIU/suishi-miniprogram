@@ -1,0 +1,8 @@
+<view class="notice {{kind}}">
+  <view class="ico ico-{{icon}} {{kind === 'danger' ? 'ico-dg' : kind === 'normal' ? 'ico-t2' : 'ico-ink'}} nbico"></view>
+  <text class="txt">{{text}}</text>
+  <view wx:if="{{action}}" class="act" bindtap="onAct">{{action}}</view>
+  <view class="x" bindtap="onClose">
+    <view class="ico ico-close ico-t3 nbx"></view>
+  </view>
+</view>

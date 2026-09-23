@@ -1,0 +1,13 @@
+/* ============================================================
+   我的页 · 页面级样式
+   ============================================================ */
+
+.sc{height:100%}
+
+.userbox{align-items:flex-start}
+.uico{width:56rpx;height:56rpx}
+.usub{margin-top:6rpx}
+.renamebtn{flex:none;font-weight:400;padding-top:6rpx}
+
+/* 注销行：整行居中、无箭头，避免和普通设置项混淆 */
+.frow.ctr{justify-content:center;min-height:104rpx}

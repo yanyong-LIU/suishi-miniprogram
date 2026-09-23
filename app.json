@@ -1,0 +1,35 @@
+{
+  "pages": [
+    "pages/list/list",
+    "pages/calendar/calendar",
+    "pages/mine/mine",
+    "pages/detail/detail",
+    "pages/history/history",
+    "pages/trash/trash",
+    "pages/privacy/privacy",
+    "pages/about/about"
+  ],
+  "window": {
+    "navigationStyle": "custom",
+    "backgroundColor": "#F6F3EC",
+    "backgroundTextStyle": "dark",
+    "navigationBarBackgroundColor": "#F6F3EC",
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "碎事清单"
+  },
+  "tabBar": {
+    "custom": true,
+    "color": "#A19B8D",
+    "selectedColor": "#3D4E68",
+    "backgroundColor": "#F6F3EC",
+    "borderStyle": "white",
+    "list": [
+      { "pagePath": "pages/list/list", "text": "清单" },
+      { "pagePath": "pages/calendar/calendar", "text": "日历" },
+      { "pagePath": "pages/mine/mine", "text": "我的" }
+    ]
+  },
+  "style": "v2",
+  "lazyCodeLoading": "requiredComponents",
+  "sitemapLocation": "sitemap.json"
+}

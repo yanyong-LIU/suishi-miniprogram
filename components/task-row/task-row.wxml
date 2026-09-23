@@ -1,0 +1,46 @@
+<view wx:if="{{view}}" class="row {{view.isDone ? 'done' : ''}}">
+
+  <!-- 左滑露出的操作层 -->
+  <view class="rowact">
+    <view class="abtn ed" catchtap="onEdit">
+      <view class="ico ico-edit ico-w raico"></view>
+      <text>编辑</text>
+    </view>
+    <view class="abtn de" catchtap="onDel">
+      <view class="ico ico-trash ico-w raico"></view>
+      <text>删除</text>
+    </view>
+  </view>
+
+  <view
+    class="row-in {{dragging ? 'dragging' : ''}} {{flashing ? 'flash' : ''}}"
+    style="transform:translateX({{shift}}rpx)"
+    bindtouchstart="onTouchStart"
+    bindtouchmove="onTouchMove"
+    bindtouchend="onTouchEnd"
+    bindtouchcancel="onTouchEnd"
+  >
+    <view class="chk {{view.isDone ? 'on' : ''}} {{view.late ? 'od' : ''}}" catchtap="onToggle">
+      <view class="box"></view>
+    </view>
+
+    <view class="rbody" catchtap="onOpen">
+      <view class="rtitle">
+        <text>{{view.title}}</text>
+        <view wx:if="{{view.strike}}" class="strike"></view>
+      </view>      <view class="rsub">
+        <block wx:for="{{view.sub}}" wx:key="k" wx:for-item="s">
+          <text wx:if="{{s.tag}}" class="tag {{s.tag}}">{{s.text}}</text>
+          <text wx:else class="{{s.cls}}">{{s.text}}</text>
+        </block>
+      </view>
+    </view>
+
+    <view class="rright">
+      <view wx:if="{{view.action === 'undo'}}" class="mini txtbtn" catchtap="onUndo">撤销</view>
+      <view wx:elif="{{view.action === 'resched'}}" class="mini txtbtn" catchtap="onResched">改期</view>
+      <view wx:elif="{{view.showCal}}" class="ico ico-calendar ico-t3 rcal"></view>
+    </view>
+  </view>
+
+</view>

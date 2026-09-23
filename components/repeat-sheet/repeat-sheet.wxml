@@ -1,0 +1,98 @@
+<!-- ============================================================
+     重复规则（第二层弹层）
+     ------------------------------------------------------------
+     选中「农历每年」后立刻展开公历 ↔ 农历换算卡与推算提示。
+     提示用 warning 色（琥珀）而不是 danger（红）：闰月退化、腊月三十
+     遇小月都是正常行为，不是错误。
+     顺序照原型：选项 → 推算提示 → 换算卡 → 胶囊 → 闰月开关 + 说明。
+     ============================================================ -->
+<view wx:if="{{show}}" class="shwrap">
+  <view class="scrim" bindtap="onCancel"></view>
+
+  <view class="sheet rssheet" catchtap="noop">
+    <view class="grab"><view class="grabi"></view></view>
+
+    <view class="snav">
+      <view class="snavb" bindtap="onCancel">取消</view>
+      <view class="t">重复</view>
+      <view class="snavb end ci" bindtap="onOk">完成</view>
+    </view>
+
+    <scroll-view class="sbody" scroll-y>
+
+      <!-- 七种规则 -->
+      <view class="opts rsopts">
+        <view
+          wx:for="{{opts}}"
+          wx:key="key"
+          class="opt {{item.on ? 'on' : ''}}"
+          data-v="{{item.key}}"
+          bindtap="onType"
+        >
+          <view class="bar"></view>
+          <view class="tx">
+            <text class="m">{{item.label}}</text>
+            <text wx:if="{{item.sub}}" class="s">{{item.sub}}</text>
+          </view>
+          <view wx:if="{{item.on}}" class="ck">
+            <view class="ico ico-check ico-ink"></view>
+          </view>
+        </view>
+      </view>
+
+      <!-- 推算提示：琥珀色，陈述事实而非报错。放在换算卡之前，
+           用户还没选参数就先看到边界。 -->
+      <view wx:if="{{warn}}" class="warnbar">
+        <view class="ico ico-warn ico-wn wbicon"></view>
+        <text class="flex1">{{warn}}</text>
+      </view>
+
+      <!-- 农历换算卡：四行两段，公历 → 农历，中间一个 ↓。
+           两个日期都用 l2 字号，值本身才是主角，标签只是标注。 -->
+      <view wx:if="{{conv}}" class="conv convcard">
+        <view class="l1">公历</view>
+        <view class="l2">{{conv.solar}}</view>
+        <view class="ar">↓</view>
+        <view class="l1">农历</view>
+        <view class="l2">{{conv.lunar}}</view>
+        <view class="dsc">{{conv.dsc}}</view>
+      </view>
+
+      <!-- 各规则的可选参数 -->
+      <block wx:for="{{chipGroups}}" wx:key="key" wx:for-item="g" wx:for-index="gi">
+        <view class="gtitle {{gi === 0 ? 'first' : ''}}">{{g.title}}</view>
+        <scroll-view class="chips scrollx" scroll-x enable-flex>
+          <view
+            wx:for="{{g.items}}"
+            wx:key="v"
+            wx:for-item="c"
+            class="chip {{c.on ? 'on' : ''}}"
+            data-k="{{g.key}}"
+            data-v="{{c.v}}"
+            bindtap="onChip"
+          >{{c.label}}</view>
+        </scroll-view>
+      </block>
+
+      <!-- 闰月：只有农历每年才有，且必须解释退化行为 -->
+      <block wx:if="{{conv}}">
+        <view class="group leapgroup">
+          <view class="frow">
+            <view class="ico ico-moon ico-t3"></view>
+            <text class="lb">闰月</text>
+            <view class="flex1"></view>
+            <view class="sw {{leapOn ? 'on' : ''}}" catchtap="onLeap">
+              <view class="knob"></view>
+            </view>
+          </view>
+        </view>
+        <view class="lockmsg">
+          <view class="ico ico-info ico-t3"></view>
+          <text>遇到没有闰{{lunarMonthName}}月的年份，会按普通月同日提醒</text>
+        </view>
+      </block>
+
+      <view style="height:28rpx"></view>
+    </scroll-view>
+  </view>
+</view>

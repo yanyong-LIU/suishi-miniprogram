@@ -1,0 +1,6 @@
+<view class="empty">
+  <view class="ico ico-note ico-td eicon"></view>
+  <view class="e1 serif">{{title}}</view>
+  <view wx:if="{{sub}}" class="e2">{{sub}}</view>
+  <view wx:if="{{btn}}" class="ebtn" bindtap="onBtn">{{btn}}</view>
+</view>

@@ -1,0 +1,19 @@
+{
+  "navigationStyle": "custom",
+  "enablePullDownRefresh": true,
+  "backgroundColor": "#F6F3EC",
+  "backgroundTextStyle": "dark",
+  "usingComponents": {
+    "segment": "/components/segment/segment",
+    "notice-bar": "/components/notice-bar/notice-bar",
+    "empty-state": "/components/empty-state/empty-state",
+    "task-row": "/components/task-row/task-row",
+    "toast-view": "/components/toast-view/toast-view",
+    "confirm-dialog": "/components/confirm-dialog/confirm-dialog",
+    "action-sheet": "/components/action-sheet/action-sheet",
+    "wheel-picker": "/components/wheel-picker/wheel-picker",
+    "guide-sheet": "/components/guide-sheet/guide-sheet",
+    "editor-sheet": "/components/editor-sheet/editor-sheet",
+    "nav-bar": "/components/nav-bar/nav-bar"
+  }
+}

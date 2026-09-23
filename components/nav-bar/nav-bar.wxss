@@ -1,0 +1,20 @@
+@import "../../styles/icons.wxss";
+
+.navwrap { flex: none; background: #F6F3EC; }
+.navspacer { flex: none; }
+.nav {
+  display: flex;
+  align-items: center;
+  height: 88rpx;
+  padding: 0 12rpx;
+}
+.navside { width: 140rpx; flex: none; display: flex; align-items: center; }
+.navside.right { justify-content: flex-end; }
+.navback { display: flex; align-items: center; gap: 4rpx; padding: 16rpx 8rpx; }
+.navico { width: 40rpx; height: 40rpx; }
+.navtitle {
+  flex: 1;
+  min-width: 0;
+  text-align: center;
+  font-size: 32rpx;
+}

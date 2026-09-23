@@ -1,0 +1,67 @@
+@import "../../styles/icons.wxss";
+
+.frow {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+  min-height: 104rpx;
+  padding: 16rpx 28rpx;
+  width: 100%;
+}
+.frow + .frow::before {
+  content: '';
+  position: absolute;
+  left: 28rpx;
+  right: 0;
+  top: 0;
+  height: 1rpx;
+  background: #EFEBE1;
+}
+.frow.tap:active { background: #EFEBE1; }
+.frow.dis .lb, .frow.dis .vl { color: #C6C1B4; }
+
+.fric { width: 36rpx; height: 36rpx; }
+.frarw { width: 28rpx; height: 28rpx; }
+
+.frow .lb {
+  flex: none;
+  font-size: 30rpx;
+  color: #6E6A5F;
+}
+.frow .vl {
+  flex: 1;
+  min-width: 0;
+  text-align: right;
+  font-size: 30rpx;
+  color: #26241F;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.frow .vl.ph { color: #A19B8D; }
+
+.flex1 { flex: 1; min-width: 0; }
+.center { text-align: center; }
+
+.sw {
+  position: relative;
+  flex: none;
+  width: 76rpx;
+  height: 44rpx;
+  border-radius: 999rpx;
+  background: #D9D4C7;
+  transition: background .2s;
+}
+.sw .knob {
+  position: absolute;
+  top: 4rpx;
+  left: 4rpx;
+  width: 36rpx;
+  height: 36rpx;
+  border-radius: 50%;
+  background: #fff;
+  transition: transform .2s cubic-bezier(.32, .72, 0, 1);
+}
+.sw.on { background: #3D4E68; }
+.sw.on .knob { transform: translateX(32rpx); }

@@ -1,0 +1,38 @@
+/* 分段控件（组件自带样式，不依赖页面 wxss） */
+.seg {
+  position: relative;
+  display: flex;
+  margin: 28rpx 0 12rpx;
+  background: #EDE9DF;
+  border-radius: 999rpx;
+  padding: 6rpx;
+  height: 72rpx;
+}
+.seg .thumb {
+  position: absolute;
+  top: 6rpx;
+  left: 6rpx;
+  bottom: 6rpx;
+  background: #FFFFFF;
+  border: 1rpx solid #E5E0D4;
+  border-radius: 999rpx;
+  transition: transform .22s cubic-bezier(.32, .72, 0, 1);
+  box-shadow: 0 2rpx 6rpx rgba(38, 36, 31, .05);
+}
+.seg .segbtn {
+  position: relative;
+  flex: 1;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26rpx;
+  color: #6E6A5F;
+  z-index: 1;
+  white-space: nowrap;
+  transition: color .18s;
+}
+.seg .segbtn.on {
+  color: #3D4E68;
+  font-weight: 500;
+}

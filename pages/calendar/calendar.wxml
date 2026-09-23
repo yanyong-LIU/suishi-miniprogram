@@ -1,0 +1,91 @@
+<!-- ============================================================
+     日历页（Tab 2）
+     ------------------------------------------------------------
+     两个标记必须能同时出现：今天（靛墨实心圆）+ 选中日（外描一圈）。
+     农历标注全部来自 utils/lunar.js 的实算结果。
+     ============================================================ -->
+<view class="root {{fontCls}}">
+  <nav-bar spacer-only="{{true}}"></nav-bar>
+
+  <view class="page">
+    <!-- 月份导航 + 星期表头 + 网格：固定不滚 -->
+    <view class="calhead">
+      <view class="calnav">
+        <view class="nvbtn" bindtap="onPrev">
+          <view class="ico ico-left ico-ink"></view>
+        </view>
+        <view class="ttl">{{monthLabel}}</view>
+        <view class="nvbtn" bindtap="onNext">
+          <view class="ico ico-right ico-ink"></view>
+        </view>
+      </view>
+
+      <view wx:if="{{!sameMonth}}" class="backtoday" bindtap="onToday">回到今天</view>
+
+      <view class="week">
+        <view wx:for="{{weekDays}}" wx:key="*this" class="wk">{{item}}</view>
+      </view>
+
+      <view class="grid">
+        <view
+          wx:for="{{cells}}"
+          wx:key="key"
+          class="cell {{item.out ? 'out' : ''}} {{item.today ? 'today' : ''}} {{item.sel ? 'sel' : ''}}"
+          data-key="{{item.key}}"
+          bindtap="onPickDay"
+        >
+          <view class="cd">{{item.n}}</view>
+          <view wx:if="{{item.hb}}" class="hb {{item.hb === '班' ? 'wb' : ''}}">{{item.hb}}</view>
+          <view class="cl {{item.la ? 'cc' : ''}}">{{item.lt}}</view>
+          <view class="dots">
+            <view wx:for="{{item.dots}}" wx:for-item="d" wx:key="index" class="dot {{d.od ? 'od' : ''}}"></view>
+            <text wx:if="{{item.more}}" class="more">+{{item.more}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 选中日期的任务 -->
+    <view class="scroll">
+      <scroll-view class="sc" scroll-y>
+        <view class="ghead">
+          <text>{{dayTitle}}</text>
+          <text class="n">{{dayTasks.length}}</text>
+        </view>
+
+        <view wx:if="{{dayTasks.length}}" class="daylist">
+          <task-row
+            wx:for="{{dayTasks}}"
+            wx:key="id"
+            wx:for-item="t"
+            id="row-{{t.id}}"
+            task="{{t}}"
+            mode="normal"
+            show-date="{{false}}"
+            bind:toggle="onRowToggle"
+            bind:open="onRowOpen"
+            bind:edit="onRowEdit"
+            bind:del="onRowDel"
+            bind:undo="onRowUndo"
+            bind:resched="onRowResched"
+          ></task-row>
+        </view>
+
+        <view wx:else class="hint center">这天还没有安排。</view>
+
+        <view class="addline" bindtap="onAddCal">
+          <view class="ico ico-plus ico-ink"></view>
+          <text>给这天加一件事</text>
+        </view>
+
+        <view style="height:200rpx"></view>
+      </scroll-view>
+    </view>
+  </view>
+
+  <!-- 覆盖层 -->
+  <toast-view id="toast"></toast-view>
+  <action-sheet id="sheet"></action-sheet>
+  <wheel-picker id="picker"></wheel-picker>
+  <editor-sheet id="editor"></editor-sheet>
+</view>

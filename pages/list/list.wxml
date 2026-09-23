@@ -1,0 +1,106 @@
+<view class="root {{fontCls}}">
+  <nav-bar spacer-only="{{true}}"></nav-bar>
+
+  <view class="page">
+    <!-- 页头：大号衬线标题 + 日期一行 -->
+    <view class="ph">
+      <view class="t24 serif ci h1">{{headTitle}}</view>
+      <view class="t13 c3 hsub">{{headSub.text}}<text wx:if="{{headSub.lunar}}" class="cc">{{headSub.lunar}}</text></view>
+
+      <notice-bar
+        wx:if="{{notice.show}}"
+        kind="{{notice.kind}}"
+        text="{{notice.text}}"
+        action="{{notice.action}}"
+        code="{{notice.code}}"
+        bind:act="onNoticeAct"
+        bind:close="onNoticeClose"
+      ></notice-bar>
+
+      <segment items="{{segs}}" value="{{seg}}" bind:change="onSegChange"></segment>
+    </view>
+
+    <!-- 列表 -->
+    <view class="scroll">
+      <scroll-view class="sc" scroll-y style="height:100%">
+        <!-- 骨架屏 -->
+        <block wx:if="{{booting}}">
+          <view class="skel"><view class="bar"></view><view class="bar w2"></view></view>
+          <view class="skel"><view class="bar"></view><view class="bar w3"></view></view>
+        </block>
+
+        <block wx:else>
+          <view wx:if="{{seg === 'overdue' && sections.length}}" class="seg-tip">
+            这些碎事已经过了时间，可以完成，也可以改个新时间。
+          </view>
+
+          <block wx:for="{{sections}}" wx:key="key" wx:for-item="sec">
+            <view class="ghead">
+              <text class="{{sec.danger ? 'gexp' : ''}}">{{sec.title}}</text>
+              <text class="n">{{sec.count}}</text>
+            </view>
+            <task-row
+              wx:for="{{sec.tasks}}"
+              wx:key="id"
+              wx:for-item="t"
+              id="row-{{t.id}}"
+              task="{{t}}"
+              mode="{{sec.mode}}"
+              show-date="{{sec.showDate}}"
+              bind:toggle="onRowToggle"
+              bind:open="onRowOpen"
+              bind:edit="onRowEdit"
+              bind:del="onRowDel"
+              bind:undo="onRowUndo"
+              bind:resched="onRowResched"
+            ></task-row>
+          </block>
+
+          <empty-state
+            wx:if="{{empty}}"
+            title="{{empty.title}}"
+            sub="{{empty.sub}}"
+            btn="{{empty.btn}}"
+            bind:btn="onEmptyBtn"
+          ></empty-state>
+
+          <view wx:if="{{showHistory}}" class="morewrap">
+            <view class="txtbtn" style="display:block;text-align:center;width:100%" bindtap="onHistory">
+              查看全部 {{historyCount}} 条完成记录 ›
+            </view>
+          </view>
+
+          <view style="height:180rpx"></view>
+        </block>
+      </scroll-view>
+    </view>
+  </view>
+
+  <!-- 悬浮添加 -->
+  <view class="fab" bindtap="onAdd">
+    <view class="ico ico-plus ico-w fabi"></view>
+  </view>
+
+  <!-- 隐私门：z-index 高于 TabBar，未同意前无法进入任何页 -->
+  <view wx:if="{{gate}}" class="gate">
+    <view class="gsp"></view>
+    <view class="ico ico-doc ico-ink glogo"></view>
+    <view class="gt serif">碎事清单</view>
+    <view class="gs">把要记的事放进来，到点我们叫你</view>
+    <view class="gsp"></view>
+    <view class="gbtn" bindtap="onGateAgree">同意并开始</view>
+    <view class="gagree">
+      <view>开始前请阅读并同意</view>
+      <view>《用户协议》 与 <text class="glink" bindtap="onGatePrivacy">《隐私政策》</text></view>
+      <view>所有碎事只保存在你的手机里，我们看不到</view>
+    </view>
+  </view>
+
+  <!-- 覆盖层 -->
+  <toast-view id="toast"></toast-view>
+  <confirm-dialog id="dialog"></confirm-dialog>
+  <action-sheet id="sheet"></action-sheet>
+  <wheel-picker id="picker"></wheel-picker>
+  <guide-sheet id="guide"></guide-sheet>
+  <editor-sheet id="editor"></editor-sheet>
+</view>

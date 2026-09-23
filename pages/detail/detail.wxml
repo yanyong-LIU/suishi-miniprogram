@@ -1,0 +1,108 @@
+<!-- ============================================================
+     详情页 = 信任页
+     ------------------------------------------------------------
+     固定三行：微信提醒还剩几次 / 日历写没写进去 / 下次到底几点。
+     三行里的额度与首页提示条、我的页读数同源（S.quota）。
+     ============================================================ -->
+<view class="root {{fontCls}}">
+  <nav-bar title="碎事" show-back="{{true}}" right-text="{{isDone || isGone ? '' : '编辑'}}" bind:back="onBack" bind:right="onEdit"></nav-bar>
+
+  <view class="page">
+
+    <!-- 已删除后的收尾态：保留一个撤销入口，不让用户只能去「最近删除」翻 -->
+    <block wx:if="{{isGone}}">
+      <view class="scroll">
+        <view class="gonewrap">
+          <view class="ico ico-trash ico-td goneico"></view>
+          <view class="t18">{{title ? '已删除' : '这件碎事已经不在清单里了'}}</view>
+          <view class="t13 c3 gonep">删除后保留 7 天，可在「我的 → 最近删除」里找回。这条记录始终只存在你的手机上。</view>
+          <view class="gonedbtn txtbtn" bindtap="onRestore">撤销删除</view>
+          <view class="gobackbtn btn2" bindtap="onBack">返回清单</view>
+        </view>
+      </view>
+    </block>
+
+    <block wx:else>
+      <scroll-view class="sc" scroll-y>
+        <!-- 标题区 -->
+        <view class="dwrap">
+          <view class="dtitle serif">{{title}}</view>
+          <view class="dtime">
+            {{dateLabel}}<text wx:if="{{timeLabel}}"> {{timeLabel}}</text>
+            <text wx:if="{{allDay}}" class="c3 t13"> 全天</text>
+          </view>
+          <view class="dlunar cc">{{lunar}}</view>
+          <view wx:if="{{tags.length}}" class="tags">
+            <view wx:for="{{tags}}" wx:key="text" class="tag {{item.cn ? 'cn' : 'ink'}}">{{item.text}}</view>
+          </view>
+        </view>
+
+        <!-- 提醒状态：本页最重要的一块 -->
+        <view class="gtitle">提醒状态</view>
+        <view class="card cardpad">
+          <view class="kv">
+            <text class="k">微信提醒</text>
+            <view class="v">
+              <text class="{{remindCls}}">{{remindText}}</text>
+              <text wx:if="{{showTopup}}" class="txtbtn sm" bindtap="onTopup">补充</text>
+            </view>
+          </view>
+          <view class="kv">
+            <text class="k">系统日历</text>
+            <text class="v {{syncCalCls}}">{{syncCalText}}</text>
+          </view>
+          <view class="kv">
+            <text class="k">下次提醒</text>
+            <text class="v">{{nextText}}</text>
+          </view>
+          <view wx:if="{{missed}}" class="missed">这条提醒没有发出去（超过 1 小时未发出，不再补发）</view>
+        </view>
+
+        <!-- 备注 -->
+        <block wx:if="{{hasNote}}">
+          <view class="gtitle">备注</view>
+          <view class="card cardpad">
+            <view class="dnote">{{note}}</view>
+          </view>
+        </block>
+
+        <!-- 兜底通道 -->
+        <block wx:if="{{showIcs}}">
+          <view class="gtitle">兜底通道</view>
+          <view class="card">
+            <view class="frow tap" bindtap="onIcs">
+              <view class="ico ico-download ico-ink"></view>
+              <text class="lb flex1 left">{{icsLabel}}</text>
+              <view class="ico ico-right ico-t3"></view>
+            </view>
+          </view>
+        </block>
+
+        <view style="height:40rpx"></view>
+      </scroll-view>
+
+      <!-- 底部动作 -->
+      <view class="pagefoot">
+        <block wx:if="{{isDone}}">
+          <view class="btn2 full" bindtap="onUndo">取消完成</view>
+        </block>
+        <block wx:else>
+          <view class="btn" bindtap="onComplete">标记完成</view>
+          <view class="center footdel">
+            <text class="txtbtn danger" bindtap="onDelete">删除这件事</text>
+          </view>
+          <!-- 自测：未部署云函数时，本地到点结算是唯一可验证的提醒路径 -->
+          <view wx:if="{{devMode}}" class="demo" bindtap="onSimulate">
+            <text class="dtxt">模拟到点（演示用）</text>
+          </view>
+        </block>
+      </view>
+    </block>
+  </view>
+
+  <!-- 覆盖层 -->
+  <action-sheet id="sheet"></action-sheet>
+  <confirm-dialog id="dialog"></confirm-dialog>
+  <guide-sheet id="guide"></guide-sheet>
+  <editor-sheet id="editor"></editor-sheet>
+</view>

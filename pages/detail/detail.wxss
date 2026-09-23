@@ -1,0 +1,25 @@
+/* ============================================================
+   详情页 · 页面级样式
+   ============================================================ */
+
+.sc{height:100%}
+
+/* 额度行里的「补充」按钮：比常规 txtbtn 小一号，避免抢走主任务视线 */
+.txtbtn.sm{font-size:var(--t13);padding:0 0 0 8rpx}
+.frow .lb.left{text-align:left}
+.btn2.full{width:100%;display:flex}
+
+/* 底部「删除这件事」：与「标记完成」保持距离，降低误触 */
+.footdel{margin-top:24rpx}
+
+/* ── 已删除后的收尾态 ───────────────────────────────────── */
+.gonewrap{display:flex;flex-direction:column;align-items:center;text-align:center;
+  padding:140rpx 64rpx 0}
+.goneico{width:88rpx;height:88rpx;margin-bottom:36rpx}
+.gonep{margin-top:20rpx;line-height:1.75}
+.gonedbtn{margin-top:52rpx}
+.gobackbtn{margin-top:24rpx;width:100%;display:flex}
+
+/* ── 自测行：与原型 .demo 同构，居中下划线小字 ─────────── */
+.demo{display:flex;justify-content:center;padding:20rpx 32rpx 0}
+.demo .dtxt{font-size:var(--t12);color:var(--t3);text-decoration:underline;text-underline-offset:6rpx}

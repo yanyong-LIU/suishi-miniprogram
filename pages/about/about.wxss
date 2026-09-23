@@ -1,0 +1,7 @@
+/* 关于 · 页面级样式 */
+.sc{height:100%}
+
+.logo{display:flex;align-items:center;justify-content:center;padding:52rpx 0 8rpx}
+.alogo{width:128rpx;height:128rpx}
+.appname{letter-spacing:.14em;margin-top:24rpx;text-align:center}
+.appver{margin-top:12rpx}

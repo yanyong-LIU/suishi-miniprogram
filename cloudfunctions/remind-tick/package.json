@@ -1,0 +1,10 @@
+{
+  "name": "remind-tick",
+  "version": "1.0.0",
+  "description": "碎事清单 · 定时扫描到期提醒并下发订阅消息",
+  "main": "index.js",
+  "private": true,
+  "dependencies": {
+    "wx-server-sdk": "~2.6.3"
+  }
+}

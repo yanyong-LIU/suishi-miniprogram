@@ -1,0 +1,32 @@
+/* ============================================================
+   日历页 · 页面级样式
+   ------------------------------------------------------------
+   网格与星期表头固定在上方，只有「选中日期的任务」区域滚动。
+   ============================================================ */
+
+/* 顶部这一块承担的是清单页 .ph 的角色，必须带上同样的横向内边距。
+   原型把日历放在 `.page > .ph` 里，`.ph{padding:2px 16px 0}` 与
+   `.week/.grid` 各自的 8px 叠加，格子的实际边距是 24px。
+   早前 .calhead 只写了 flex:none，等于少了 16px —— 整月格子比原型宽一圈，
+   而按类名比对的保真度脚本看不见（它只知道 .grid 自己声明了 8px）。 */
+.calhead{flex:none;padding:4rpx 32rpx 0}
+.sc{height:100%}
+.daylist{}
+
+/* 非当前月时才出现，居中一行，不挤占导航栏的左右按钮位 */
+.backtoday{
+  display:flex;align-items:center;justify-content:center;
+  height:56rpx;margin:-4rpx 32rpx 4rpx;
+  font-size:var(--t13);font-weight:500;color:var(--ink);
+}
+.backtoday:active{opacity:.6}
+
+/* 网格底部与列表之间留一条呼吸线 */
+.grid{padding-bottom:12rpx}
+
+/* 法定节假日角标（国务院公告年份才有）：休=绿、班=灰。
+   朱砂按设计令牌只给农历用，节假日是公历法定安排，不占那个色。
+   原型侧 .cell .hb 同步此规则（改任一处要两边同步）。 */
+.hb{position:absolute;top:4rpx;right:10rpx;font-size:18rpx;line-height:1;
+  font-weight:500;color:var(--success)}
+.hb.wb{color:var(--t3)}

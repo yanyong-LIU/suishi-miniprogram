@@ -1,0 +1,30 @@
+<!-- 关于：说明提醒的两条通道与农历数据来源 -->
+<view class="root {{fontCls}}">
+  <nav-bar title="关于碎事清单" show-back="{{true}}" bind:back="onBack"></nav-bar>
+
+  <view class="page">
+    <scroll-view class="sc" scroll-y>
+      <view class="rich">
+        <view class="logo">
+          <view class="ico ico-note ico-ink alogo"></view>
+        </view>
+        <view class="t24 serif ci appname">碎事清单</view>
+        <view class="t13 c3 center appver">{{version}} · 原生微信小程序</view>
+
+        <view class="h3">为什么做这个</view>
+        <view class="p">要记的事往往很碎：交社保、给妈妈打电话、给爷爷扫墓、还信用卡。它们不够「大」到值得建一个项目，却足够重要到忘不起。碎事清单只解决这一件事——把它记下来，然后到点叫你。</view>
+
+        <view class="h3">提醒为什么值得单独说</view>
+        <view class="p">微信小程序没有后台常驻能力，所有本地定时通知都做不到。所以我们做了两条通道：微信订阅消息为主，手机系统日历兜底。界面上「提醒状态」那三行，就是为了让你不用猜它到底会不会响。</view>
+
+        <view class="h3">关于农历</view>
+        <view class="p">农历重复是这个产品的差异点。1900–2100 年的农历数据由 5 个独立历法库交叉校验重建，其中流传最广的那张表在 1933、1996、2060 三年有误，已修正。</view>
+
+        <view class="h3">不做的事</view>
+        <view class="p">不做等级、积分、徽章，不做进度环，不做社交。清单工具一旦开始奖励你，你就得先哄它。</view>
+      </view>
+
+      <view style="height:60rpx"></view>
+    </scroll-view>
+  </view>
+</view>

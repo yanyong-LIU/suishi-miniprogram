@@ -1,0 +1,44 @@
+@import "../../styles/icons.wxss";
+
+.notice {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  height: 84rpx;
+  padding: 0 28rpx;
+  margin-top: 24rpx;
+  border-radius: 24rpx;
+  font-size: 26rpx;
+}
+.notice.warning { background: #FBF1E2; }
+.notice.danger { background: #FAECEA; }
+.notice.info { background: #E8EDF5; }
+.notice.normal { background: #EDE9DF; }
+.notice .txt {
+  flex: 1;
+  min-width: 0;
+  color: #6E6A5F;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.notice .act {
+  flex: none;
+  font-size: 26rpx;
+  font-weight: 500;
+  color: #3D4E68;
+  padding: 12rpx 0 12rpx 12rpx;
+}
+.notice.warning .act { color: #B4813A; }
+.notice.danger .act { color: #C4453A; }
+.notice .x {
+  flex: none;
+  width: 52rpx;
+  height: 52rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: -8rpx;
+}
+.nbico { width: 34rpx; height: 34rpx; }
+.nbx { width: 26rpx; height: 26rpx; }

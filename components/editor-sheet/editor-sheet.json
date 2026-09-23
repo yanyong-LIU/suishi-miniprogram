@@ -1,0 +1,10 @@
+{
+  "component": true,
+  "styleIsolation": "apply-shared",
+  "usingComponents": {
+    "wheel-picker": "/components/wheel-picker/wheel-picker",
+    "guide-sheet": "/components/guide-sheet/guide-sheet",
+    "action-sheet": "/components/action-sheet/action-sheet",
+    "repeat-sheet": "/components/repeat-sheet/repeat-sheet"
+  }
+}

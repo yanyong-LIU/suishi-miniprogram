@@ -1,0 +1,29 @@
+<view class="frow {{type === 'tap' && !disabled ? 'tap' : ''}} {{disabled ? 'dis' : ''}}" bindtap="onTap">
+
+  <view wx:if="{{icon}}" class="ico ico-{{icon}} ico-t3 fric"></view>
+
+  <text class="lb {{danger ? 'cd' : ''}} {{type === 'button' ? 'flex1 center' : ''}}">{{label}}</text>
+
+  <block wx:if="{{type === 'tap'}}">
+    <text class="vl {{value ? '' : 'ph'}}">{{value || placeholder}}</text>
+    <view class="ico ico-right ico-t3 frarw"></view>
+  </block>
+
+  <block wx:elif="{{type === 'switch'}}">
+    <view class="flex1"></view>
+    <view class="sw {{sw ? 'on' : ''}}" catchtap="onSwitch">
+      <view class="knob"></view>
+    </view>
+  </block>
+
+  <block wx:elif="{{type === 'text'}}">
+    <text class="vl {{value ? '' : 'ph'}}">{{value || placeholder}}</text>
+    <text wx:if="{{disabled}}" class="t12 c3">即将上线</text>
+  </block>
+
+  <block wx:elif="{{type === 'button'}}">
+    <view class="flex1"></view>
+    <view class="ico ico-right ico-t3 frarw"></view>
+  </block>
+
+</view>

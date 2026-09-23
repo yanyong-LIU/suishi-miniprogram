@@ -1,0 +1,156 @@
+@import "../../styles/icons.wxss";
+
+.row {
+  position: relative;
+  overflow: hidden;
+  background: #F6F3EC;
+}
+.row-in {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 24rpx;
+  padding: 26rpx 32rpx 26rpx 0;
+  background: #F6F3EC;
+  transition: transform .24s ease-out, background .2s;
+}
+.row-in.dragging { transition: none; }
+.row-in.flash { background: #EDF3EE; }
+.row-in::after {
+  content: '';
+  position: absolute;
+  left: 128rpx;
+  right: 0;
+  bottom: 0;
+  height: 1rpx;
+  background: #E5E0D4;
+}
+
+/* ── 勾选 ── */
+.chk {
+  flex: none;
+  width: 96rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 2rpx;
+}
+.chk .box {
+  width: 40rpx;
+  height: 40rpx;
+  border-radius: 50%;
+  border: 3rpx solid #C6C1B4;
+  position: relative;
+  transition: background .2s, border-color .2s;
+}
+.chk.od .box { border-color: #C4453A; }
+.chk.on .box {
+  background: #4E7A57;
+  border-color: #4E7A57;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.chk.on .box::after {
+  content: '';
+  width: 18rpx;
+  height: 10rpx;
+  border-left: 4rpx solid #fff;
+  border-bottom: 4rpx solid #fff;
+  transform: rotate(-45deg) translate(2rpx, -2rpx);
+}
+
+/* ── 主体 ── */
+.rbody { flex: 1; min-width: 0; }
+.rtitle {
+  font-size: 32rpx;
+  color: #26241F;
+  line-height: 1.4;
+  position: relative;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+/* 删除线常驻、宽度为 0，由 .row.done 拉满 —— 原型就是这个做法
+   （`.rtitle .strike{width:0}` + `.row.done .rtitle .strike{width:100%}`）。
+   写成 wx:if + width:100% 的话，勾选完成时那条线是瞬间出现的，没有 0.24s 的扫过。 */
+.rtitle .strike {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  height: 2rpx;
+  width: 0;
+  background: #C6C1B4;
+  transition: width .24s ease-out;
+}
+.row.done .rtitle { color: #6E6A5F; }
+.row.done .rtitle .strike { width: 100%; }
+
+.rsub {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12rpx;
+  margin-top: 6rpx;
+  font-size: 26rpx;
+  color: #6E6A5F;
+}
+.rsub .note {
+  color: #A19B8D;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 18em;
+}
+/* 分隔点比正文浅一档，否则「时间 · 每周三 · 备注」会糊成一片。
+   局部重写一份，与 .tag/.note 的处理保持一致，不依赖全局层叠。 */
+.rsub .sep { color: #C6C1B4; }
+.rsub .odtime { color: #C4453A; }
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  height: 36rpx;
+  padding: 0 16rpx;
+  border-radius: 999rpx;
+  font-size: 24rpx;
+  line-height: 1;
+  white-space: nowrap;
+}
+.tag.ink { background: #E8EDF5; color: #3D4E68; }
+.tag.cn { background: #F7E8E2; color: #B4553F; }
+
+/* ── 右侧 ── */
+.rright {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  color: #3D4E68;
+  padding-top: 4rpx;
+}
+.rright .mini { font-size: 26rpx; font-weight: 500; padding: 8rpx 0; }
+.rcal { width: 30rpx; height: 30rpx; }
+
+/* ── 左滑操作 ── */
+.rowact {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  display: flex;
+  z-index: 0;
+}
+.rowact .abtn {
+  width: 136rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6rpx;
+  font-size: 24rpx;
+  color: #fff;
+}
+.rowact .ed { background: #3D4E68; }
+.rowact .de { background: #C4453A; }
+.raico { width: 36rpx; height: 36rpx; }

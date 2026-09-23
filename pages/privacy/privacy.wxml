@@ -1,0 +1,26 @@
+<!-- 隐私政策：写事实，不写免责声明 -->
+<view class="root {{fontCls}}">
+  <nav-bar title="隐私政策" show-back="{{true}}" bind:back="onBack"></nav-bar>
+
+  <view class="page">
+    <scroll-view class="sc" scroll-y>
+      <view class="rich">
+        <view class="upd">更新日期：{{updated}}</view>
+
+        <view class="h3">我们不收集你的碎事</view>
+        <view class="p">碎事清单把任务、备注、完成记录全部保存在你手机本地的存储里。我们不会把这些内容上传到任何服务器，也没有账号体系——因为没有账号，也就没有「你的数据在别人那里」这回事。</view>
+
+        <view class="h3">提醒是怎么发出来的</view>
+        <view class="p">到点提醒需要你授权「订阅消息」。每次授权只能发送一条提醒，所以我们会把授权累积成一个额度池，界面上的「提醒额度」就是它剩下的数量。额度用完时，我们宁可让你看见「提醒额度用完了」，也不会假装还会响。</view>
+
+        <view class="h3">写入手机日历</view>
+        <view class="p">开启「同时写入手机日历」后，事件会写进系统日历并带闹钟。这条通道不依赖微信是否打开，也不依赖网络。农历重复无法写入系统日历，会按最近一次的公历时间写入，这一限制在开启时已明确告知。</view>
+
+        <view class="h3">你可以随时清空</view>
+        <view class="p">「我的 → 清除本地缓存」会立即抹掉本机上的全部数据，不需要向我们申请。</view>
+      </view>
+
+      <view style="height:60rpx"></view>
+    </scroll-view>
+  </view>
+</view>

@@ -1,0 +1,69 @@
+/* 清单页局部样式 */
+.page { flex: 1; display: flex; flex-direction: column; min-height: 0; }
+.scroll { flex: 1; min-height: 0; overflow: hidden; }
+.sc { height: 100%; }
+.h1 { line-height: 1.35; }
+.hsub { margin-top: 6rpx; }
+.morewrap { padding: 36rpx 0; }
+
+/* ── 悬浮添加按钮 ── */
+.fab {
+  position: fixed;
+  right: 32rpx;
+  bottom: calc(100rpx + env(safe-area-inset-bottom) + 32rpx);
+  width: 104rpx;
+  height: 104rpx;
+  border-radius: 999rpx;
+  background: #3D4E68;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4rpx 20rpx rgba(38, 36, 31, .16);
+  z-index: 90;
+  transition: transform .16s, background .16s;
+}
+.fab:active { transform: scale(.94); background: #2B384C; }
+.fabi { width: 44rpx; height: 44rpx; }
+
+/* ── 隐私门 ──
+   下面这段法律说明曾整行被 TabBar 压住：原来 bottom padding 是 80rpx(40px)，
+   而 TabBar 高 100rpx + 安全区（约 84px），最后一行必然落在它底下。
+   现在 TabBar 在未同意前整条隐藏（见 custom-tab-bar/index.js 的 refresh），
+   这里再留出安全区，两处一起保证文字完整可读。 */
+.gate {
+  position: fixed;
+  inset: 0;
+  z-index: 9900;
+  background: #F6F3EC;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-sizing: border-box;
+  padding: 48rpx 64rpx calc(80rpx + env(safe-area-inset-bottom));
+  text-align: center;
+  overflow-y: auto;
+}
+.gsp { flex: 1; min-height: 0; }
+.glogo { width: 160rpx; height: 160rpx; margin-bottom: 44rpx; }
+.gt { font-size: 48rpx; color: #3D4E68; letter-spacing: .16em; margin-bottom: 20rpx; }
+.gs { font-size: 30rpx; color: #6E6A5F; }
+.gbtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 560rpx;
+  height: 96rpx;
+  border-radius: 24rpx;
+  background: #3D4E68;
+  color: #fff;
+  font-size: 32rpx;
+  font-weight: 500;
+}
+.gagree {
+  font-size: 24rpx;
+  color: #A19B8D;
+  margin-top: 28rpx;
+  line-height: 1.7;
+}
+.glink { color: #3D4E68; }

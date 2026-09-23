@@ -1,0 +1,11 @@
+{
+  "navigationStyle": "custom",
+  "backgroundColor": "#F6F3EC",
+  "backgroundTextStyle": "dark",
+  "usingComponents": {
+    "nav-bar": "/components/nav-bar/nav-bar",
+    "task-row": "/components/task-row/task-row",
+    "empty-state": "/components/empty-state/empty-state",
+    "editor-sheet": "/components/editor-sheet/editor-sheet"
+  }
+}

@@ -1,0 +1,45 @@
+@import "../../styles/icons.wxss";
+@import "../../styles/sheet.wxss";
+
+/* 原型 openEditor() 用 maxHeight:'88%'：留出上沿，让用户看得见底下
+   清单里那一条，知道自己正在改哪件事 */
+.essheet { max-height: 88%; }
+
+/* ── 标题输入 ───────────────────────────────────────────── */
+/* padding-top 24rpx：头部 snav 之后给标题框留一道呼吸位。
+   无键盘时（无内联 sheetStyle，回落到 .essheet 的 88% 高度）标题不再贴着
+   头部，避免「要做什么？」像是被弹层顶端压住。原型此处是内联 div
+   （padding:4px 16px 2px），.titlewrap 只在小程序侧存在，不参与保真度比对，
+   此数属刻意定过的间距，别随手改回。 */
+.titlewrap { padding: 24rpx 32rpx 4rpx; }
+.titlein {
+  font-size: var(--t18);
+  line-height: 1.5;
+  padding: 12rpx 0;
+  width: 100%;
+}
+.tinph { color: var(--t3); }
+
+/* 一条静态细线。原型就是 1px hairline，不做焦点动效 ——
+   输入框本身已经在闪光标，再加一条会自己长出来的线是多余的动静。 */
+.uline { height: 2rpx; background: var(--hairline); margin-top: 4rpx; }
+
+/* 计数位固定占高：不占位的话，输入到第 41 个字时整块会往下跳一格 */
+.tcount { text-align: right; height: 32rpx; line-height: 32rpx; margin-top: 4rpx; }
+
+/* ── 时间已过的快捷修正 ─────────────────────────────────── */
+.warnbar .quickfix { margin-left: auto; flex: none; font-size: var(--t13); padding: 0 0 0 16rpx; }
+
+/* ── 字段组 ─────────────────────────────────────────────── */
+/* 第一组与上方内容的距离（原型写在 group 上的行内 margin-top:10px）；
+   第二组由 app.wxss 的 .group + .group 接管 */
+.gfirst { margin-top: 20rpx; }
+
+/* ── 备注展开区 ─────────────────────────────────────────── */
+.notewrap { padding: 0 28rpx 24rpx; }
+/* 约三行的起手高度（原型 textarea rows="3"，15px × 1.65 行高） */
+.notewrap .dnote { min-height: 148rpx; }
+.ncount { text-align: right; }
+
+/* ── 删除入口 ───────────────────────────────────────────── */
+.delwrap { padding: 40rpx 0 8rpx; }

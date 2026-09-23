@@ -1,0 +1,54 @@
+/* ============================================================
+   底部弹层通用外壳
+   ------------------------------------------------------------
+   与原型 `.sheetwrap > .scrim + .sheet` 同构，逐值对齐原型
+   第 232–245 行的 `.sheet / .grab / .snav / .sbody / .sfoot`。
+
+   编辑器弹层与重复规则弹层共用本文件。两者都是三层结构：
+
+     .shwrap           固定铺满，z-index 8000，自带层叠上下文
+       .scrim          遮罩，点击关闭
+       .sheet          贴底面板，animation 上滑
+
+   叠放关系靠嵌套而不是调 z-index：重复弹层是编辑器弹层的子节点，
+   整棵子树都在编辑器的层叠上下文里，天然压在上面。
+   （TabBar 是原生组件，压不住，见 utils/platform.js#overlayTab）
+
+   为什么 sbody 用 scroll-view 而原型是 div + overflow-y:auto：
+   scroll-view 在小程序里是原生滚动容器，能保证惯性滚动与滚动条
+   隐藏的表现一致；样式仍按原型写，flex:1 + min-height:0 让它
+   在 flex 列里拿到确定高度。
+   ============================================================ */
+
+.shwrap { position: fixed; inset: 0; z-index: 8000; }
+
+.scrim {
+  position: absolute;
+  inset: 0;
+  background: rgba(38, 36, 31, .4);
+  animation: shfade .16s ease-out;
+}
+@keyframes shfade { from { opacity: 0 } to { opacity: 1 } }
+
+.sheet {
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  background: #FFFFFF;
+  border-radius: 32rpx 32rpx 0 0;
+  animation: shin .24s cubic-bezier(.32, .72, 0, 1);
+  display: flex;
+  flex-direction: column;
+  padding-bottom: env(safe-area-inset-bottom);
+}
+@keyframes shin { from { transform: translateY(101%) } to { transform: translateY(0) } }
+
+.grab { flex: none; padding: 16rpx 0 8rpx; display: flex; justify-content: center; }
+.grabi { width: 72rpx; height: 8rpx; border-radius: 999rpx; background: #E5E0D4; }
+
+.snav { flex: none; display: flex; align-items: center; padding: 4rpx 16rpx 12rpx; min-height: 80rpx; }
+.snav .snavb { flex: none; width: 128rpx; font-size: var(--t15); padding: 16rpx 20rpx; text-align: left; }
+.snav .snavb.end { text-align: right; }
+.snav .t { flex: 1; min-width: 0; text-align: center; font-size: var(--t18); font-weight: 500; }
+
+.sbody { flex: 1; min-height: 0; overflow-y: auto; overflow-x: hidden; padding-bottom: 24rpx; }
+.sfoot { flex: none; padding: 20rpx 32rpx 32rpx; background: #FFFFFF; }

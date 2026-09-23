@@ -1,0 +1,26 @@
+@import "../../styles/icons.wxss";
+
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 112rpx 64rpx 0;
+  text-align: center;
+}
+.eicon { width: 72rpx; height: 72rpx; margin-bottom: 36rpx; }
+.e1 { font-size: 36rpx; color: #26241F; line-height: 1.45; }
+.e2 { font-size: 26rpx; color: #6E6A5F; margin-top: 16rpx; }
+.ebtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 80rpx;
+  padding: 0 44rpx;
+  margin-top: 44rpx;
+  border-radius: 24rpx;
+  border: 1rpx solid #E5E0D4;
+  background: #FFFFFF;
+  color: #3D4E68;
+  font-size: 30rpx;
+  font-weight: 500;
+}

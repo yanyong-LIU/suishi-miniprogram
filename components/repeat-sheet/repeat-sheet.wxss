@@ -1,0 +1,16 @@
+@import "../../styles/sheet.wxss";
+
+/* 原型 openRepeat() 用 maxHeight:'78%'（编辑器是 88%）：重复面板里
+   最多会同时出现 31 个胶囊 + 换算卡，留出上沿给用户看见底下还开着编辑器 */
+.rssheet { max-height: 78%; }
+
+/* 选项列表与 snav 的间距：原型写在 opts 上的行内 margin-top:4px */
+.rsopts { margin-top: 8rpx; }
+.opts .opt .ck .ico { width: 32rpx; height: 32rpx; }
+
+/* 换算卡与上方选项之间 14px（原型为 conv 上的行内 margin-top:14px，
+   与页首的间距由 sbody 承担，这里只补卡片自身的上边距） */
+.convcard { margin-top: 28rpx; }
+
+/* 闰月开关与上方胶囊之间 14px */
+.leapgroup { margin-top: 28rpx; }

@@ -1,0 +1,93 @@
+<!-- ============================================================
+     我的页（Tab 3）
+     ------------------------------------------------------------
+     额度进度条与首页提示条、详情页的「剩 N 次」读同一个字段，
+     三处不一致是这类产品最容易踩的坑。
+     ============================================================ -->
+<view class="root {{fontCls}}">
+  <nav-bar spacer-only="{{true}}"></nav-bar>
+
+  <view class="page">
+    <scroll-view class="sc" scroll-y>
+
+      <!-- 用户 -->
+      <view class="userbox">
+        <view class="avatar">
+          <text wx:if="{{hasName}}" class="ini">{{initial}}</text>
+          <view wx:else class="ico ico-user ico-t3 uico"></view>
+        </view>
+        <view class="flex1">
+          <view class="t16">{{name}}</view>
+          <view class="t13 c2 usub">第 {{streak}} 天陪你记碎事</view>
+        </view>
+        <text class="txtbtn c2 renamebtn" bindtap="onRename">设置</text>
+      </view>
+
+      <!-- 统计 -->
+      <view class="card stats">
+        <view class="it">
+          <view class="num serif">{{created}}</view>
+          <view class="lb">累计创建</view>
+        </view>
+        <view class="it">
+          <view class="num serif">{{completed}}</view>
+          <view class="lb">已完成</view>
+        </view>
+        <view class="it">
+          <view class="num serif">{{streak}}</view>
+          <view class="lb">连续使用</view>
+        </view>
+      </view>
+
+      <!-- 提醒额度：进度条而非静态数字 -->
+      <view class="card quota mt12">
+        <view class="qh">
+          <text class="l">提醒额度</text>
+          <text class="r {{quotaTextCls}}">剩 {{quota}} / {{quotaCap}}</text>
+        </view>
+        <view class="qbar">
+          <view class="fill" style="width:{{quotaPct}}%;background:{{quotaBg}}"></view>
+        </view>
+        <view class="qf">
+          <text class="qt {{quotaTextCls}}">{{quotaTip}}</text>
+          <text class="txtbtn" bindtap="onTopup">补充授权</text>
+        </view>
+      </view>
+
+      <!-- 设置（与原型一致：两组之间不加分组小标题，用 16px 间距分隔） -->
+      <view class="opts mt16">
+        <field-row type="tap" label="默认提醒时间" value="{{defaultRemindTime}}" icon="clock" bind:tap="onPickTime"></field-row>
+        <field-row type="tap" label="周起始日" value="{{weekStartLabel}}" bind:tap="onPickWeek"></field-row>
+        <field-row type="switch" label="系统日历同步" sw="{{syncCalendar}}" bind:switch="onToggleCal"></field-row>
+        <field-row type="tap" label="字号" value="{{fontScaleLabel}}" bind:tap="onPickFont"></field-row>
+        <field-row type="text" label="免打扰时段" value="23:00–07:00" disabled="{{true}}"></field-row>
+        <field-row type="tap" label="最近删除" value="{{trashCount}} 件" bind:tap="onTrash"></field-row>
+      </view>
+
+      <view class="opts mt16">
+        <field-row type="tap" label="隐私政策" bind:tap="onPrivacy"></field-row>
+        <field-row type="tap" label="关于碎事清单" value="v1.0.5" bind:tap="onAbout"></field-row>
+        <field-row type="tap" label="清除本地缓存" bind:tap="onReset"></field-row>
+      </view>
+
+      <view class="opts mt16">
+        <view class="frow ctr" bindtap="onWipe">
+          <text class="lb cd flex1 center">注销并删除全部数据</text>
+        </view>
+      </view>
+
+      <view class="footnote">
+        <view>碎事清单 · 原生微信小程序</view>
+        <view>数据保存在本机本地存储里，刷新不丢失</view>
+      </view>
+
+      <view style="height:200rpx"></view>
+    </scroll-view>
+  </view>
+
+  <!-- 覆盖层 -->
+  <action-sheet id="sheet"></action-sheet>
+  <confirm-dialog id="dialog"></confirm-dialog>
+  <wheel-picker id="picker"></wheel-picker>
+  <guide-sheet id="guide"></guide-sheet>
+</view>

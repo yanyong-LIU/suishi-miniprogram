@@ -1,0 +1,33 @@
+<view wx:if="{{show}}" class="gswrap">
+  <view class="gsscrim"></view>
+
+  <view class="gssheet" catchtap="noop">
+    <view class="gsgrab"><view class="gsgrabi"></view></view>
+
+    <!-- 订阅消息授权 -->
+    <block wx:if="{{kind === 'auth'}}">
+      <view class="gsico">
+        <view class="ico ico-bell ico-ink gsbell"></view>
+      </view>
+      <view class="gstitle">{{topup ? '补充提醒额度' : '开启提醒，到点我们叫你'}}</view>
+      <view class="gsdesc">微信要求每次提醒都要你点头。请勾选「总是保持以上选择」，这样我们才能在你没打开小程序时也提醒你。</view>
+      <view class="gsbtn" bindtap="onPrimary">{{topup ? '补充授权' : '开启提醒'}}</view>
+      <view class="gsdismiss" bindtap="onDismiss">暂不开启</view>
+      <view class="gsfoot">当前可用提醒额度 {{quota}} 次</view>
+    </block>
+
+    <!-- 系统日历引导 -->
+    <block wx:else>
+      <view class="gstitle">怕忘？写进手机日历</view>
+      <view class="gsdesc">手机日历的闹钟不依赖微信，也没有网络要求。就算你没打开微信，到点它也会响。</view>
+      <view class="gsrows">
+        <view wx:for="{{calRows}}" wx:key="text" class="ckrow">
+          <view class="ico ico-{{item.col === 'warning' ? 'warn' : 'check'}} {{item.col === 'warning' ? 'ico-wn' : 'ico-ok'}} cronly"></view>
+          <text>{{item.text}}</text>
+        </view>
+      </view>
+      <view class="gsbtn" bindtap="onPrimary">写进手机日历</view>
+      <view class="gsdismiss" bindtap="onDismiss">先不用</view>
+    </block>
+  </view>
+</view>

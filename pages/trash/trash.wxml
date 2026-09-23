@@ -1,0 +1,43 @@
+<!-- 最近删除：删除只是标记，数据始终留在本机，7 天后自动清理 -->
+<view class="root {{fontCls}}">
+  <nav-bar title="最近删除" show-back="{{true}}" bind:back="onBack"></nav-bar>
+
+  <view class="page">
+    <scroll-view class="sc" scroll-y>
+      <view wx:if="{{items.length}}" class="hint">
+        删除后保留 {{keepDays}} 天，超过会自动清理。这里只是标记，数据始终留在本机。
+      </view>
+
+      <view wx:if="{{items.length}}" class="daylist">
+        <view wx:for="{{items}}" wx:key="id" class="row">
+          <view class="row-in">
+            <view class="chk"></view>
+            <view class="rbody">
+              <view class="rtitle gone">{{item.title}}</view>
+              <view class="rsub">
+                <text>{{item.time}}</text>
+                <block wx:if="{{item.seriesCount}}">
+                  <text class="sep">·</text>
+                  <text class="tag ink">已重复 {{item.seriesCount}} 次</text>
+                </block>
+              </view>
+            </view>
+            <view class="rright">
+              <text class="mini txtbtn" data-id="{{item.id}}" bindtap="onRestore">恢复</text>
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <empty-state
+        wx:if="{{empty}}"
+        title="{{empty.title}}"
+        sub="{{empty.sub}}"
+        btn="{{empty.btn}}"
+        bind:btn="onEmptyBtn"
+      ></empty-state>
+
+      <view style="height:80rpx"></view>
+    </scroll-view>
+  </view>
+</view>

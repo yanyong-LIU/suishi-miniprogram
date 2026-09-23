@@ -1,0 +1,10 @@
+<view class="seg">
+  <view class="thumb" style="{{thumbStyle}}"></view>
+  <view
+    wx:for="{{items}}"
+    wx:key="key"
+    class="segbtn {{value === item.key ? 'on' : ''}}"
+    data-k="{{item.key}}"
+    bindtap="onTap"
+  >{{item.label}}</view>
+</view>

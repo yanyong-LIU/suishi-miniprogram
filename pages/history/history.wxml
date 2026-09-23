@@ -1,0 +1,43 @@
+<!-- 全部完成记录：按天分组，与清单页「已完成」分段共用同一批数据 -->
+<view class="root {{fontCls}}">
+  <nav-bar title="全部完成记录" show-back="{{true}}" bind:back="onBack"></nav-bar>
+
+  <view class="page">
+    <scroll-view class="sc" scroll-y>
+      <block wx:for="{{groups}}" wx:key="k" wx:for-item="g">
+        <view class="ghead">
+          <text>{{g.title}}</text>
+          <text class="n">{{g.count}}</text>
+        </view>
+        <view class="daylist">
+          <task-row
+            wx:for="{{g.tasks}}"
+            wx:key="id"
+            wx:for-item="t"
+            id="row-{{t.id}}"
+            task="{{t}}"
+            mode="undo"
+            show-date="{{false}}"
+            bind:open="onRowOpen"
+            bind:undo="onRowUndo"
+            bind:edit="onRowEdit"
+            bind:del="onRowDel"
+          ></task-row>
+        </view>
+      </block>
+
+      <empty-state
+        wx:if="{{empty}}"
+        title="{{empty.title}}"
+        sub="{{empty.sub}}"
+        btn="{{empty.btn}}"
+        bind:btn="onEmptyBtn"
+      ></empty-state>
+
+      <view style="height:80rpx"></view>
+    </scroll-view>
+  </view>
+
+  <!-- 编辑器（半屏弹层，不跳页） -->
+  <editor-sheet id="editor"></editor-sheet>
+</view>

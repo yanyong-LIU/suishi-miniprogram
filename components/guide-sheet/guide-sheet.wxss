@@ -1,0 +1,78 @@
+@import "../../styles/icons.wxss";
+@import "../action-sheet/action-sheet.wxss";
+
+.gswrap { position: fixed; inset: 0; z-index: 8000; }
+.gsscrim {
+  position: absolute;
+  inset: 0;
+  background: rgba(38, 36, 31, .4);
+  animation: asfade .16s ease-out;
+}
+.gssheet {
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  background: #FFFFFF;
+  border-radius: 32rpx 32rpx 0 0;
+  animation: asin .24s cubic-bezier(.32, .72, 0, 1);
+  padding: 0 56rpx calc(36rpx + env(safe-area-inset-bottom));
+  max-height: 88%;
+  overflow-y: auto;
+}
+.gsgrab { padding: 16rpx 0 8rpx; display: flex; justify-content: center; }
+.gsgrabi { width: 72rpx; height: 8rpx; border-radius: 999rpx; background: #E5E0D4; }
+
+.gsico { display: flex; justify-content: center; padding: 20rpx 0 8rpx; }
+.gsbell { width: 104rpx; height: 104rpx; }
+
+.gstitle {
+  font-size: 36rpx;
+  font-weight: 500;
+  text-align: center;
+  color: #26241F;
+  margin-top: 20rpx;
+}
+.gsdesc {
+  font-size: 26rpx;
+  color: #6E6A5F;
+  line-height: 1.7;
+  margin-top: 24rpx;
+}
+.gsrows { margin-top: 28rpx; }
+
+.gsbtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 96rpx;
+  border-radius: 24rpx;
+  background: #3D4E68;
+  color: #fff;
+  font-size: 32rpx;
+  font-weight: 500;
+  margin-top: 40rpx;
+}
+.gsbtn:active { background: #2B384C; }
+
+.gsdismiss {
+  text-align: center;
+  font-size: 30rpx;
+  color: #A19B8D;
+  padding: 24rpx 0 0;
+}
+.gsfoot {
+  text-align: center;
+  font-size: 24rpx;
+  color: #A19B8D;
+  padding: 20rpx 0 0;
+}
+
+.ckrow {
+  display: flex;
+  gap: 18rpx;
+  align-items: flex-start;
+  padding: 14rpx 0;
+  font-size: 30rpx;
+  line-height: 1.55;
+  color: #26241F;
+}
+.cronly { width: 36rpx; height: 36rpx; margin-top: 4rpx; }

@@ -1,0 +1,4 @@
+<view class="toast {{show ? 'show' : ''}}">
+  <text>{{msg}}</text>
+  <view wx:if="{{actionLabel}}" class="tact" bindtap="onAction">{{actionLabel}}</view>
+</view>

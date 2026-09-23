@@ -1,0 +1,12 @@
+{
+  "navigationStyle": "custom",
+  "backgroundColor": "#F6F3EC",
+  "backgroundTextStyle": "dark",
+  "usingComponents": {
+    "nav-bar": "/components/nav-bar/nav-bar",
+    "action-sheet": "/components/action-sheet/action-sheet",
+    "confirm-dialog": "/components/confirm-dialog/confirm-dialog",
+    "guide-sheet": "/components/guide-sheet/guide-sheet",
+    "editor-sheet": "/components/editor-sheet/editor-sheet"
+  }
+}
