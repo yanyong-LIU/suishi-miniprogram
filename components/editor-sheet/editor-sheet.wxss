@@ -2,20 +2,30 @@
 @import "../../styles/sheet.wxss";
 
 /* 原型 openEditor() 用 maxHeight:'88%'：留出上沿，让用户看得见底下
-   清单里那一条，知道自己正在改哪件事 */
+   清单里那一条，知道自己正在改哪件事。
+   键盘不做整层上移（v1.0.7 移除）：弹层保持这个 88% 上限不动，
+   键盘只盖住下半截字段，头部「保存」始终可点。 */
 .essheet { max-height: 88%; }
 
 /* ── 标题输入 ───────────────────────────────────────────── */
-/* padding-top 24rpx：头部 snav 之后给标题框留一道呼吸位。
-   无键盘时（无内联 sheetStyle，回落到 .essheet 的 88% 高度）标题不再贴着
-   头部，避免「要做什么？」像是被弹层顶端压住。原型此处是内联 div
-   （padding:4px 16px 2px），.titlewrap 只在小程序侧存在，不参与保真度比对，
-   此数属刻意定过的间距，别随手改回。 */
-.titlewrap { padding: 24rpx 32rpx 4rpx; }
+/* 标题块钉在 scroll-view 之外（snav 与 sbody 之间，见 wxml 注释）。
+   flex:none：键盘把弹层压矮时也不被压缩。呼吸间距全在这里，
+   不进输入框（input 的坑见 .titlein 注释）。原型此处是内联 div
+   （padding:4px 16px 2px），.titlewrap 只在小程序侧存在，不参与
+   保真度比对，此数属刻意定过的间距，别随手改回。 */
+.titlewrap { flex: none; padding: 24rpx 32rpx 4rpx; background: #FFFFFF; }
+/* 微信 input 的渲染坑（v1.0.6 真机复现、v1.0.7 定性）：给 input 加
+   上下 padding（旧值 12rpx 0）后，内部文字/占位符会被绘到输入框
+   上沿之外、被输入框自己裁掉上半截 —— 聚焦态（原生层接管渲染）尤其
+   明显，且与弹层滚动无关（v1.0.6 把标题挪出滚动区后裁切纹丝不动，
+   实验证伪了「滚动区滚动」的猜测）。
+   唯一稳的写法：定高 + line-height 等高 + 零 padding，文字由输入框
+   自己垂直居中。高度乘 var(--f) 跟随「字号」设置缩放。
+   呼吸间距全部交给 .titlewrap 的 padding，不进输入框。 */
 .titlein {
   font-size: var(--t18);
-  line-height: 1.5;
-  padding: 12rpx 0;
+  height: calc(72rpx * var(--f));
+  line-height: calc(72rpx * var(--f));
   width: 100%;
 }
 .tinph { color: var(--t3); }

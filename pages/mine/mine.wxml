@@ -66,7 +66,7 @@
 
       <view class="opts mt16">
         <field-row type="tap" label="隐私政策" bind:tap="onPrivacy"></field-row>
-        <field-row type="tap" label="关于碎事清单" value="v1.0.5" bind:tap="onAbout"></field-row>
+        <field-row type="tap" label="关于碎事清单" value="v1.0.9" bind:tap="onAbout"></field-row>
         <field-row type="tap" label="清除本地缓存" bind:tap="onReset"></field-row>
       </view>
 

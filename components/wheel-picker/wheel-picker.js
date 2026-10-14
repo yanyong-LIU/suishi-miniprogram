@@ -36,6 +36,7 @@ Component({
   data: {
     show: false,
     mode: 'datetime',
+    title: '',
     allDay: false,
     dates: [],
     hours: [],
@@ -48,7 +49,11 @@ Component({
     /* 冒号覆盖层：picker-view 的列是等宽 flex，
        time 模式 2 列 → 中点 50%；datetime 模式 3 列 → 第 2、3 列之间 4/6 */
     showColon: false,
-    colonLeft: '50%'
+    colonLeft: '50%',
+    /* custom 模式（重复规则的参数选择）：任意列，由调用方给
+       columns=[{key, items:[{v,label}], value}]，确认回传 {values:{key:v}} */
+    customCols: [],
+    customIdx: []
   },
   lifetimes: {
     attached() {
@@ -62,6 +67,27 @@ Component({
     open(opt) {
       opt = opt || {};
       const mode = opt.mode || 'datetime';
+
+      /* custom 模式：任意列滚轮。列数据、初始选中值全部由调用方给，
+         不碰日期/时间状态（_di/_hh/_mm），确认时按 items[v] 换算回值。 */
+      if (mode === 'custom') {
+        if (!this.data.show) PF.overlayTab(true);
+        return new Promise(resolve => {
+          this._resolve = resolve;
+          const cols = (opt.columns || []).map(c => ({ key: c.key, items: c.items || [] }));
+          const idx = (opt.columns || []).map(c => {
+            const i = (c.items || []).findIndex(it => it.v === c.value);
+            return i >= 0 ? i : 0;
+          });
+          this.setData({
+            show: true, mode: 'custom',
+            title: opt.title || '',
+            customCols: cols, customIdx: idx,
+            hint: '', showColon: false, allDay: false
+          });
+        });
+      }
+
       const base = new Date(opt.dueAt != null ? opt.dueAt : Date.now());
       const t0 = startOfDay(new Date());
       const di = Math.round((startOfDay(base) - t0) / 86400000) + PAD_DAYS;
@@ -80,6 +106,7 @@ Component({
         this.setData({
           show: true,
           mode,
+          title: '',
           allDay: mode === 'time' ? false : !!opt.allDay
         }, () => {
           this.syncValue();
@@ -89,6 +116,7 @@ Component({
     },
 
     syncValue() {
+      if (this.data.mode === 'custom') return;
       const a = this.data.allDay;
       const isTime = this.data.mode === 'time';
       this.setData({
@@ -103,6 +131,10 @@ Component({
 
     onChange(e) {
       const v = e.detail.value;
+      if (this.data.mode === 'custom') {
+        this.setData({ customIdx: v });
+        return;
+      }
       /* allDay 时列数变成 [日期, 全天]，索引含义随之变化：
          value[0] 仍是日期，末位是「全天」占位列，要忽略掉 */
       if (this.data.mode === 'time') {
@@ -117,6 +149,7 @@ Component({
     },
 
     refreshHint() {
+      if (this.data.mode === 'custom') return;
       const c = this.current();
       this.setData({
         hint: L.pad(c.date.getFullYear()) + ' 年 ' + (c.date.getMonth() + 1) + ' 月 ' + c.date.getDate() + ' 日 周' +
@@ -163,6 +196,16 @@ Component({
     },
 
     onOk() {
+      /* custom 模式：把各列选中索引换算回调用方的值域 */
+      if (this.data.mode === 'custom') {
+        const values = {};
+        this.data.customCols.forEach((c, i) => {
+          const it = c.items[this.data.customIdx[i]];
+          if (it) values[c.key] = it.v;
+        });
+        this.close({ values });
+        return;
+      }
       const c = this.current();
       const ts = atTime(c.date, c.allDay ? 0 : c.hh, c.allDay ? 0 : c.mm).getTime();
       this.close({ ts, allDay: c.allDay });

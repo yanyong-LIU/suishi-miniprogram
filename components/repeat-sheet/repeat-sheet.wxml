@@ -58,20 +58,17 @@
         <view class="dsc">{{conv.dsc}}</view>
       </view>
 
-      <!-- 各规则的可选参数 -->
-      <block wx:for="{{chipGroups}}" wx:key="key" wx:for-item="g" wx:for-index="gi">
-        <view class="gtitle {{gi === 0 ? 'first' : ''}}">{{g.title}}</view>
-        <scroll-view class="chips scrollx" scroll-x enable-flex>
-          <view
-            wx:for="{{g.items}}"
-            wx:key="v"
-            wx:for-item="c"
-            class="chip {{c.on ? 'on' : ''}}"
-            data-k="{{g.key}}"
-            data-v="{{c.v}}"
-            bindtap="onChip"
-          >{{c.label}}</view>
-        </scroll-view>
+      <!-- 各规则的可选参数：字段行展示当前值，点开滚轮选择（v1.0.8，
+           原型 rpBody 同步改为同构的字段行；31 个胶囊在手机上排不下） -->
+      <block wx:if="{{paramRow}}">
+        <view class="group">
+          <view class="frow tap" bindtap="onPickParam">
+            <view class="ico ico-calendar ico-t3"></view>
+            <text class="lb">{{paramRow.label}}</text>
+            <text class="vl">{{paramRow.value}}</text>
+            <view class="ico ico-right ico-t3"></view>
+          </view>
+        </view>
       </block>
 
       <!-- 闰月：只有农历每年才有，且必须解释退化行为 -->
@@ -95,4 +92,7 @@
       <view style="height:28rpx"></view>
     </scroll-view>
   </view>
+
+  <!-- 参数滚轮：本组件内嵌的第三层弹层（custom 模式） -->
+  <wheel-picker id="rpwheel"></wheel-picker>
 </view>

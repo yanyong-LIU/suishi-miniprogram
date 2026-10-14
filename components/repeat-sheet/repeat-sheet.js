@@ -28,7 +28,7 @@ Component({
     opts: [],
     warn: '',
     conv: null,
-    chipGroups: [],
+    paramRow: null,
     leapOn: false,
     lunarMonthName: ''
   },
@@ -88,35 +88,26 @@ Component({
         return { key: k, label: m, sub, on: rp.type === k };
       });
 
-      const groups = [];
+      /* 各规则的参数改为滚轮选择（v1.0.8，与日期时间同形态，原型 rpBody
+         同步改为字段行）：行上只展示当前值，点开才是滚轮 —— 31 个胶囊
+         横着排在手机上既看不全也点不准，滚轮一屏放下、居中高亮。 */
+      let paramRow = null;
       if (rp.type === 'weekly') {
-        groups.push({
-          title: '在哪天', key: 'wd',
-          /* 只写「日 / 一 / 二」，不写「周日 / 周一」：
-             标题已经说明是「在哪天」，重复一遍「周」会让 7 个胶囊撑出屏 */
-          items: [0, 1, 2, 3, 4, 5, 6].map(i => ({ v: i, label: WD[i], on: (rp.params.weekday != null ? rp.params.weekday : d.getDay()) === i }))
-        });
+        const wd = rp.params.weekday != null ? rp.params.weekday : d.getDay();
+        paramRow = { label: '在哪天', value: '每周' + WD[wd] };
       } else if (rp.type === 'monthly') {
-        groups.push({ title: '每月几号', key: 'md', items: mkNum(31, ' 日', rp.params.day || d.getDate()) });
+        paramRow = { label: '每月几号', value: (rp.params.day || d.getDate()) + ' 日' };
       } else if (rp.type === 'quarterly') {
-        groups.push({ title: '每季几号', key: 'qd', items: mkNum(31, ' 日', rp.params.day || d.getDate()) });
+        paramRow = { label: '每季几号', value: (rp.params.day || d.getDate()) + ' 日' };
       } else if (rp.type === 'yearly') {
-        groups.push({ title: '月', key: 'mo', items: mkNum(12, ' 月', rp.params.month || d.getMonth() + 1) });
-        groups.push({ title: '日', key: 'md2', items: mkNum(31, ' 日', rp.params.day || d.getDate()) });
+        paramRow = { label: '哪个月哪一天', value: (rp.params.month || d.getMonth() + 1) + ' 月 ' + (rp.params.day || d.getDate()) + ' 日' };
       } else if (rp.type === 'lunarYearly') {
-        groups.push({
-          title: '农历月', key: 'lm',
-          items: mkNum(12, '月', rp.params.lunarMonth).map(x => ({ v: x.v, label: LUNAR_M[x.v] + '月', on: x.on }))
-        });
-        groups.push({
-          title: '农历日', key: 'ld',
-          items: mkNum(30, '', rp.params.lunarDay).map(x => ({ v: x.v, label: LUNAR_D[x.v], on: x.on }))
-        });
+        paramRow = { label: '农历月日', value: '农历 ' + (rp.params.isLeapMonth ? '闰' : '') + (LUNAR_M[rp.params.lunarMonth] || '') + '月' + (LUNAR_D[rp.params.lunarDay] || '') };
       }
 
       this.setData({
         opts,
-        chipGroups: groups,
+        paramRow,
         leapOn: !!rp.params.isLeapMonth,
         lunarMonthName: LUNAR_M[rp.params.lunarMonth] || '',
         warn: R.repeatEdgeWarning(this.ctx) || '',
@@ -156,18 +147,53 @@ Component({
       this.paint();
     },
 
-    onChip(e) {
-      const k = e.currentTarget.dataset.k;
-      const v = +e.currentTarget.dataset.v;
-      const p = this.ctx.repeat.params;
-      if (k === 'wd') p.weekday = v;
-      else if (k === 'md') p.day = v;
-      else if (k === 'qd') p.day = v;
-      else if (k === 'mo') p.month = v;
-      else if (k === 'md2') p.day = v;
-      else if (k === 'lm') p.lunarMonth = v;
-      else if (k === 'ld') p.lunarDay = v;
-      this.paint();
+    /* 参数滚轮：列定义按规则给，确认后写回 params 并重绘。
+       滚轮是编辑器同款组件（#rpwheel，custom 模式），弹层嵌套：
+       编辑器('hide') → 重复规则('hide') → 滚轮('hide')，
+       overlayTab 引用计数各层开关一一对应。 */
+    onPickParam() {
+      const rp = this.ctx.repeat;
+      const d = new Date(this.ctx.dueAt);
+      let title = '', columns = [];
+
+      if (rp.type === 'weekly') {
+        title = '在哪天';
+        columns = [{
+          key: 'weekday',
+          value: rp.params.weekday != null ? rp.params.weekday : d.getDay(),
+          items: [0, 1, 2, 3, 4, 5, 6].map(i => ({ v: i, label: '周' + WD[i] }))
+        }];
+      } else if (rp.type === 'monthly' || rp.type === 'quarterly') {
+        title = rp.type === 'monthly' ? '每月几号' : '每季几号';
+        columns = [{ key: 'day', value: rp.params.day || d.getDate(), items: numItems(31, ' 日') }];
+      } else if (rp.type === 'yearly') {
+        title = '哪个月哪一天';
+        columns = [
+          { key: 'month', value: rp.params.month || d.getMonth() + 1, items: numItems(12, ' 月') },
+          { key: 'day', value: rp.params.day || d.getDate(), items: numItems(31, ' 日') }
+        ];
+      } else if (rp.type === 'lunarYearly') {
+        title = '农历月日';
+        columns = [
+          { key: 'lunarMonth', value: rp.params.lunarMonth, items: numItems(12, '月').map(x => ({ v: x.v, label: LUNAR_M[x.v] + '月' })) },
+          { key: 'lunarDay', value: rp.params.lunarDay, items: numItems(30, '').map(x => ({ v: x.v, label: LUNAR_D[x.v] })) }
+        ];
+      }
+      if (!columns.length) return;
+
+      this.selectComponent('#rpwheel').open({ mode: 'custom', title, columns }).then(v => {
+        if (!v || !v.values) return;
+        const p = this.ctx.repeat.params;
+        const val = v.values;
+        /* 只写回本次滚轮里真正出现的字段：两种规则共用 day 键，
+           没出现的键保持原值，切规则不丢已选参数（同 onType 的原则） */
+        if (val.weekday != null) p.weekday = val.weekday;
+        if (val.day != null) p.day = val.day;
+        if (val.month != null) p.month = val.month;
+        if (val.lunarMonth != null) p.lunarMonth = val.lunarMonth;
+        if (val.lunarDay != null) p.lunarDay = val.lunarDay;
+        this.paint();
+      });
     },
 
     onLeap() {
@@ -189,8 +215,8 @@ Component({
   }
 });
 
-function mkNum(n, unit, cur) {
+function numItems(n, unit) {
   const out = [];
-  for (let i = 1; i <= n; i++) out.push({ v: i, label: i + unit, on: cur === i });
+  for (let i = 1; i <= n; i++) out.push({ v: i, label: i + unit });
   return out;
 }

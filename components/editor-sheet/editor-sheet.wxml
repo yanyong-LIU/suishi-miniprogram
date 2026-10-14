@@ -12,10 +12,11 @@
 <view wx:if="{{show}}" class="shwrap">
   <view class="scrim" bindtap="onCancel"></view>
 
-  <!-- style 由 onKb 给：键盘抬起时把弹层整体移到键盘之上，
-       并把可用高度写成 max-height，让 sbody 变成真正可滚的容器。
-       键盘收起时为空串，回落到 .essheet 的 max-height:88%。 -->
-  <view class="sheet essheet" style="{{sheetStyle}}" catchtap="noop">
+  <!-- 不做「键盘上推」：标题是弹层里唯一的常驻输入框，位于弹层顶部，
+       键盘弹起时它本来就在键盘之上；整层上移（旧版 onKb/sheetStyle）
+       是多余动作，还把弹层顶到状态栏底下。键盘只盖住下半部分字段，
+       头部的「保存」始终可点。v1.0.7 按用户要求移除。 -->
+  <view class="sheet essheet" catchtap="noop">
     <view class="grab"><view class="grabi"></view></view>
 
     <view class="snav">
@@ -24,26 +25,27 @@
       <view class="snavb end {{canSave ? 'ci' : 'td'}}" bindtap="onSave">保存</view>
     </view>
 
-    <scroll-view class="sbody" scroll-y>
-      <view class="titlewrap">
-        <!-- adjust-position 关掉：弹层是 fixed 的，系统那套「页面上推」
-             对它无效，只会把底下的页面也带着滚；位置由 onKb 自己算。 -->
-        <input
-          class="titlein"
-          value="{{title}}"
-          maxlength="50"
-          placeholder="要做什么？"
-          placeholder-class="tinph"
-          focus="{{autoFocus}}"
-          confirm-type="done"
-          adjust-position="{{false}}"
-          bindinput="onTitle"
-          bindkeyboardheightchange="onKb"
-        />
-        <view class="uline"></view>
-        <view class="t12 {{titleCountCls}} tcount">{{titleCount}}</view>
-      </view>
+    <!-- 标题钉在滚动区**之外**：微信框架会把 scroll-view 里聚焦的 input
+         自动滚到容器顶（adjust-position 关不掉这一层），标题跟着滚就被
+         头部裁掉半截（真机复现）。钉在这里，键盘怎么弹、列表怎么滚，
+         标题都不动 —— 它本来也是全弹层最重要的一个输入框。 -->
+    <view class="titlewrap">
+      <input
+        class="titlein"
+        value="{{title}}"
+        maxlength="50"
+        placeholder="要做什么？"
+        placeholder-class="tinph"
+        focus="{{autoFocus}}"
+        confirm-type="done"
+        adjust-position="{{false}}"
+        bindinput="onTitle"
+      />
+      <view class="uline"></view>
+      <view class="t12 {{titleCountCls}} tcount">{{titleCount}}</view>
+    </view>
 
+    <scroll-view class="sbody" scroll-y>
       <!-- 时间已过且不重复：给一条即时可点的修正路径 -->
       <view wx:if="{{pastWarn}}" class="warnbar">
         <view class="ico ico-warn ico-wn wbicon"></view>
@@ -75,18 +77,17 @@
         </view>
 
         <view wx:if="{{noteOpen}}" class="notewrap">
-          <textarea
-            class="dnote"
-            value="{{note}}"
-            maxlength="200"
-            placeholder="想补充点什么？"
-            placeholder-class="tinph"
-            focus="{{focusNote}}"
-            auto-height="{{true}}"
-            adjust-position="{{false}}"
-            bindinput="onNote"
-            bindkeyboardheightchange="onKb"
-          ></textarea>
+        <textarea
+          class="dnote"
+          value="{{note}}"
+          maxlength="200"
+          placeholder="想补充点什么？"
+          placeholder-class="tinph"
+          focus="{{focusNote}}"
+          auto-height="{{true}}"
+          adjust-position="{{false}}"
+          bindinput="onNote"
+        ></textarea>
           <view class="t12 c3 ncount">{{note.length}}/200</view>
         </view>
       </view>

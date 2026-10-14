@@ -20,5 +20,5 @@ module.exports = {
   /* 提醒提前量（分钟）。0 表示准点提醒。 */
   REMIND_AHEAD_MIN: 0,
 
-  VERSION: 'v1.0.5'
+  VERSION: 'v1.0.9'
 };

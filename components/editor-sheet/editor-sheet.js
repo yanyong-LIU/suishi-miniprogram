@@ -57,12 +57,7 @@ Component({
     syncCalendar: false,
 
     /* 时间已过 + 不重复：提示改成重复，否则用户会以为它还会响 */
-    pastWarn: false,
-
-    /* 键盘抬起的高度（px）。弹层据此整体上移，见 onKb 的注释 */
-    kbH: 0,
-    /* 上移后的内联样式；键盘收起时为空串，交回 .essheet 的 max-height:88% */
-    sheetStyle: ''
+    pastWarn: false
   },
 
   methods: {
@@ -99,7 +94,7 @@ Component({
       if (!this.data.show) PF.overlayTab(true);
       return new Promise(resolve => {
         this._resolve = resolve;
-        this.setData({ show: true, kbH: 0, sheetStyle: '' });
+        this.setData({ show: true });
         this.paint();
         /* 新建时自动聚焦标题：键盘已经在等，少一次点击。
            必须先置 false 再置 true，否则第二次打开不会重新聚焦。 */
@@ -109,45 +104,21 @@ Component({
 
     close(saved) {
       if (!this.data.show) return;
-      this.setData({ show: false, autoFocus: false, kbH: 0, sheetStyle: '' });
+      this.setData({ show: false, autoFocus: false });
       PF.overlayTab(false);
       const fn = this._resolve;
       this._resolve = null;
       if (fn) setTimeout(() => fn(!!saved), 240);
     },
 
-    /* ── 键盘 ───────────────────────────────────────────────
-       弹层是「贴底 + 内容撑高」的。键盘一抬起来，它不会自己让位：
-       下半截（重复 / 提醒 / 保存）被键盘整个盖住，而 sbody 这个
-       scroll-view 又没有确定高度、滚不动 —— 用户既看不到、也够不着，
-       标题输入框就贴着上沿被挤在键盘与标题栏之间。
-       做法：把弹层按键盘真实高度整体上移，并把「屏幕高 − 键盘高」
-       算成内联的 max-height。这样 sbody 有了确定高度，成为真正可滚的
-       容器，输入框始终落在键盘上方。
-       高度不猜：用 keyboardheightchange 给的真实像素值。              */
-    getWinH() {
-      if (this._winH) return this._winH;
-      let h = 0;
-      try {
-        h = ((wx.getWindowInfo ? wx.getWindowInfo() : wx.getSystemInfoSync()).windowHeight) || 0;
-      } catch (e) { h = 0; }
-      this._winH = h;   /* 窗口尺寸在会话内不变，取一次即可 */
-      return h;
-    },
-
-    sheetStyleFor(kbH) {
-      if (!kbH || kbH <= 0) return '';
-      const winH = this.getWinH();
-      /* 上沿留 24px：既不贴死屏幕顶，也给标题栏一点呼吸 */
-      const maxH = winH ? Math.max(240, winH - kbH - 24) : 0;
-      return 'bottom:' + kbH + 'px' + (maxH ? ';max-height:' + maxH + 'px' : '');
-    },
-
-    onKb(e) {
-      const h = (e && e.detail && typeof e.detail.height === 'number') ? e.detail.height : 0;
-      if (h === this.data.kbH) return;
-      this.setData({ kbH: h, sheetStyle: this.sheetStyleFor(h) });
-    },
+    /* ── 键盘 ─────────────────────────────────────────────
+       不做「键盘上推」（v1.0.7 按用户要求移除，旧实现 onKb/sheetStyle
+       把整层弹体移到键盘之上）。理由：标题是弹层里唯一的常驻输入框、
+       位于弹层顶部 —— 键盘弹起时它本来就在键盘之上；键盘只盖住下半截
+       字段与底部「保存」按钮，而头部的「保存」始终可点，收起键盘即可
+       够到其余字段。旧实现还把弹层顶到状态栏底下，视觉上是净损失。
+       若未来要恢复「键盘让位」，必须连同冒烟脚本里的对应断言一起重做，
+       不许只加回 bindkeyboardheightchange 不加逻辑。 */
 
     /* 新建时的默认时间：
        白天 → 今天 + 默认提醒时间；夜里 → 明天 09:00（避免默认设出一个

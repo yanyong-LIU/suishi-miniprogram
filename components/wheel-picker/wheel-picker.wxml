@@ -6,12 +6,12 @@
 
     <view class="wpsnav">
       <view class="wpcancel" bindtap="onCancel">取消</view>
-      <view class="wptitle">{{mode === 'time' ? '提醒时间' : '日期时间'}}</view>
+      <view class="wptitle">{{title || (mode === 'time' ? '提醒时间' : '日期时间')}}</view>
       <view class="wpok" bindtap="onOk">完成</view>
     </view>
 
     <!-- 快捷胶囊：仅日期模式显示 -->
-    <view wx:if="{{mode !== 'time'}}" class="wpchips">
+    <view wx:if="{{mode === 'datetime'}}" class="wpchips">
       <view class="chip {{chipToday ? 'on' : ''}}" data-o="0" bindtap="onQuick">今天</view>
       <view class="chip {{chipTomorrow ? 'on' : ''}}" data-o="1" bindtap="onQuick">明天</view>
       <view class="chip {{chipAfter ? 'on' : ''}}" data-o="2" bindtap="onQuick">后天</view>
@@ -25,18 +25,18 @@
         value="{{value}}"
         bindchange="onChange"
       >
-        <picker-view-column wx:if="{{mode !== 'time'}}" style="flex:1.5">
+        <picker-view-column wx:if="{{mode === 'datetime'}}" style="flex:1.5">
           <view wx:for="{{dates}}" wx:key="key" class="wit">
             <view class="wit1">{{item.label}}</view>
             <view class="wit2 {{item.accent ? 'cc' : ''}}">{{item.sub}}</view>
           </view>
         </picker-view-column>
 
-        <picker-view-column wx:if="{{!allDay}}" style="flex:1">
+        <picker-view-column wx:if="{{!allDay && mode !== 'custom'}}" style="flex:1">
           <view wx:for="{{hours}}" wx:key="v" class="wit witc">{{item.label}}</view>
         </picker-view-column>
 
-        <picker-view-column wx:if="{{!allDay}}" style="flex:1">
+        <picker-view-column wx:if="{{!allDay && mode !== 'custom'}}" style="flex:1">
           <view wx:for="{{mins}}" wx:key="v" class="wit witc">{{item.label}}</view>
         </picker-view-column>
 
@@ -44,6 +44,13 @@
         <picker-view-column wx:if="{{allDay}}" style="flex:1">
           <view class="wit witc alldaytxt">全天</view>
         </picker-view-column>
+
+        <!-- custom 模式：调用方给的任意列（重复规则的周几 / 几号 / 农历月日） -->
+        <block wx:if="{{mode === 'custom'}}">
+          <picker-view-column wx:for="{{customCols}}" wx:for-item="col" wx:key="key" style="flex:1">
+            <view wx:for="{{col.items}}" wx:key="v" wx:for-item="it" class="wit witc">{{it.label}}</view>
+          </picker-view-column>
+        </block>
       </picker-view>
 
       <view wx:if="{{showColon}}" class="wpcolon" style="left:{{colonLeft}}">:</view>
