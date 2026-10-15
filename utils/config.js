@@ -6,7 +6,7 @@
 module.exports = {
   /* 微信公众平台 → 功能 → 订阅消息 → 公共模板库，选用「待办提醒」类模板后
      把模板 ID 填到这里。留空则界面会提示「模板未配置」，不会静默失败。 */
-  SUBSCRIBE_TMPL_IDS: [],
+  SUBSCRIBE_TMPL_IDS: ['tO6oXTjEGNYp7z_mdmhlexRovqhMPu--j_sXXbCz8og'],
 
   /* 云函数定时触发器（提醒送达的**主通道**）。
      ⚠️ 订阅消息只能由服务端下发，小程序端拿到的只是「授权」——

@@ -28,28 +28,30 @@ const _ = db.command;
 
 /* 订阅消息模板 ID。留空则函数只做清理，不会发送任何消息。
    取自 公众平台 → 功能 → 订阅消息 → 我的模板 → 复制模板 ID。 */
-const TMPL_ID = '';
+const TMPL_ID = 'tO6oXTjEGNYp7z_mdmhlexRovqhMPu--j_sXXbCz8og';
 
 /* ============================================================
    模板字段映射 —— 换模板时**只改这一处**
    ------------------------------------------------------------
-   公众平台模板详情页里会列出关键词，形如 {{thing1.DATA}} {{time2.DATA}}。
-   下方三个键名必须与之**一字不差**（含数字序号），键名写错会直接
+   公众平台模板详情页里会列出关键词，形如 {{thing1.DATA}} {{time3.DATA}}。
+   下方键名必须与之**一字不差**（含数字序号），键名写错会直接
    返回 47003 argument invalid，而且报错不会告诉你是哪个字段写错了。
-   举例：模板关键词是 {{thing1.DATA}} / {{time2.DATA}} / {{thing3.DATA}}，
-   则这里保持原样；若模板是 {{thing3.DATA}} / {{time4.DATA}} / {{thing5.DATA}}，
-   就把三个值依次改成 thing3 / time4 / thing5。
 
-   tip 可以设为 null —— 模板只有两个关键词时用得上（自定义模板被审核
-   要求精简字段是常事）。buildPayload 里按 `if (FIELDS.tip)` 判断，
-   所以 null、空串、或直接删掉这一项都能正确省略该字段。
-   真正的坑在反方向：模板没这个字段，却留着 tip: 'thing3'，
+   已获批模板（2026-10-14）实际是四个字段：
+     日程主题 {{thing1.DATA}} / 重要程度 {{short_thing12.DATA}}
+     时间 {{time3.DATA}} / 备注 {{thing5.DATA}}
+   故映射如下；换模板时按新模板详情页的序号改。
+
+   某个字段模板没有时设为 null —— buildPayload 里按 `if (FIELDS.xxx)`
+   判断，null、空串、或直接删掉这一项都能正确省略该字段。
+   真正的坑在反方向：模板没这个字段，却留着键名，
    就会多传一个模板里不存在的键 → 47003，而报错不会指出是哪个字段。
    ============================================================ */
 const FIELDS = {
-  subject: 'thing1',   /* 事物：消息第一行 */
-  when: 'time2',       /* 时间：到点时刻 */
-  tip: 'thing3'        /* 事物：引导语；模板无此字段时改为 null */
+  subject:  'thing1',        /* 事物：日程主题行（第一行） */
+  priority: 'short_thing12', /* 短事物：重要程度，类型上限 5 字 */
+  when:     'time3',         /* 时间：到点时刻 */
+  tip:      'thing5'         /* 事物：备注引导语；模板无此字段时改为 null */
 };
 
 /* 各字段类型上限（单位：字符）。超长会被微信侧直接拒掉（47003），
@@ -147,6 +149,8 @@ function buildPayload(d) {
 
   const data = {};
   data[FIELDS.subject] = { value: fit('你有碎事到点了', LIMIT.thing) };
+  /* 重要程度：短事物类型上限 5 字，只填通用词，不带任务内容 */
+  if (FIELDS.priority) data[FIELDS.priority] = { value: fit('普通', LIMIT.phrase) };
   data[FIELDS.when] = { value: when };
   /* tip 为 null 时不拼这个字段：拼了会造出一个模板里不存在的键，
      微信侧直接判 47003，且不告诉你错在哪个字段。 */
